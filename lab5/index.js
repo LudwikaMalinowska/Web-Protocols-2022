@@ -1,10 +1,10 @@
 const express = require("express");
 const app = express();
-const game = require("./game");
+const tictactoe = require("./tictactoe");
 require("dotenv").config();
 
 app.use(express.json());
-app.use("/game", game);
+app.use("/tictactoe", tictactoe);
 
 const client = require("./config/redisClient");
 
