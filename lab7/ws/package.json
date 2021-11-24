@@ -1,0 +1,14 @@
+{
+  "name": "WS",
+  "version": "0.1.0",
+  "description": "WebSocket API",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "dependencies": {
+    "connect": "^3.7.0",
+    "serve-static": "^1.14.1",
+    "socket.io": "^4.4.0",
+    "ws": "^1.1.5"
+  }
+}
