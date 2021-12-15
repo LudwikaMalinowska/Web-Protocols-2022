@@ -1,0 +1,15 @@
+{
+  "name": "SSE-Server",
+  "version": "0.1.0",
+  "description": "Server-Sent Events Server",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "dependencies": {
+    "connect": "^3.7.0",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.15",
+    "server-sent-events": "^1.0.1",
+    "sse-channel": "^4.0.0"
+  }
+}
