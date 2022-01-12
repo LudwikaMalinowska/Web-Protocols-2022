@@ -1,0 +1,14 @@
+.chatbox{
+    height: 70%;
+    width: 30%;
+    background-color: lightblue;
+    position: relative;
+}
+
+.chatbox input {
+    position: absolute;
+    bottom: 0;
+    right:0;
+    left:0;
+    width: 98%
+}

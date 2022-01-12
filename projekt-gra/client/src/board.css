@@ -1,0 +1,32 @@
+.App {
+    
+    box-sizing: border-box;
+    height: 100vh;
+    margin-left: "20px";
+
+}
+
+.game-box {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+    margin-left: "20px";
+    
+}
+
+.board {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 70%;
+    width: 60%;
+    background-color: yellowgreen;
+}
+
+.dice {
+    height: 50px;
+    width: 50px;
+    background-color: white;
+    border: 1px solid black;
+}
