@@ -22,11 +22,11 @@ const Connect = ({connect}) => {
     const handleSubmit = (values) => {
         console.log(values);
         const { host, clientId, port, username } = values;
-        // const url = `mqtt://${host}:${port}`;
-        const url = `ws://${host}`;
+        const url = `ws://broker.emqx.io:8083/mqtt`;
+        // const url2 = `mqtt://${host}:${port}`;
 
         const options = {
-            port: 1883,
+            // port: 1883,
             keepalive: 30,
             protocolId: 'MQTT',
             protocolVersion: 4,

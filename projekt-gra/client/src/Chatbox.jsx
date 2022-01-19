@@ -1,12 +1,25 @@
+import Chat from "./Chat";
 import "./chatbox.css";
 
 
-const Chatbox = () => {
+const Chatbox = ({topic, publish, payload}) => {
     
+    const handleKeyPress = (e) => {
+        const key = e.key;
+        
+        if (key === "Enter") {
+            const message = e.target.value;
+            console.log(message);
+            publish(topic, message);
+        }
+    }
+
     return ( 
        <div className="chatbox">
-           <div className="chat"></div>
-           <input type="text" className="message-input" placeholder="Write message..."/>
+           <Chat payload={payload}/>
+           <input type="text" className="message-input" placeholder="Write message..."
+            onKeyPress={handleKeyPress}
+           />
        </div>
      );
 }
