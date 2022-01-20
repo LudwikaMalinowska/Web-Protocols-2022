@@ -22,12 +22,12 @@ const Connect = ({connect}) => {
     const handleSubmit = (values) => {
         console.log(values);
         const { host, clientId, port, username } = values;
-        const url = `ws://broker.emqx.io:8083/mqtt`;
-        // const url2 = `mqtt://${host}:${port}`;
+        // const url = `ws://broker.emqx.io:8083/mqtt`;
+        const url = `mqtt://localhost:8000/mqtt`;
 
         const options = {
-            // port: 1883,
             keepalive: 30,
+            clientId: clientId,
             protocolId: 'MQTT',
             protocolVersion: 4,
             clean: true,
@@ -40,8 +40,8 @@ const Connect = ({connect}) => {
               retain: false
             },
             rejectUnauthorized: false
-          };
-          options.clientId = clientId;
+          }
+
           options.username = username;
 
           connect(url, options);

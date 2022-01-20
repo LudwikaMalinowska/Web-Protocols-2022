@@ -10,5 +10,21 @@
     bottom: 0;
     right:0;
     left:0;
-    width: 98%
+    width: 97%
+}
+
+.chat {
+    width: 100%;
+    height: 95%;
+    box-sizing: border-box;
+    padding: 10px;
+    text-align: left;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    
+}
+
+.chat p {
+    /* background-color: rgb(186, 229, 243); */
+    /* padding: 5px; */
 }

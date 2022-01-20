@@ -2,15 +2,16 @@ import Chat from "./Chat";
 import "./chatbox.css";
 
 
-const Chatbox = ({topic, publish, payload}) => {
+const Chatbox = ({topic, publish, payload, username}) => {
     
     const handleKeyPress = (e) => {
         const key = e.key;
         
         if (key === "Enter") {
+            console.log("p", payload);
             const message = e.target.value;
             console.log(message);
-            publish(topic, message);
+            publish(topic, JSON.stringify({username, message}));
         }
     }
 

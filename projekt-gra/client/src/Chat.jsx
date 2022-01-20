@@ -1,7 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
-const Chat = ({payload}) => {
-    const [messages, setMessages] = useState([])
+const Chat = ({payload, username}) => {
+    const [messages, setMessages] = useState([]);
+    const chat = useRef(null);
+    // const chat = document.getElementById("chat");
+    // if (chat.current) {
+    //   // chat.scrollTop = chat.scrollHeight;
+    //   // chat.lastElementChild.scrollIntoView();
+    //   console.log(chat.current.lastElementChild);
+    // }
+    
 
     useEffect(() => {
         if (payload.topic) {
@@ -10,12 +18,13 @@ const Chat = ({payload}) => {
       }, [payload])
 
     const content = (messages) => {
-        const m = messages.map(item => (<p>{item.message}</p>))
+        console.log(messages);
+        const m = messages.map(item => (<p>{item.username}: {item.message}</p>))
 
         return m;
     }
     return ( 
-        <div className="chat">
+        <div className="chat" ref={chat}>
             {content(messages)}
         </div>
      );
