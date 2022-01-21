@@ -19,6 +19,13 @@ const HookMqtt = () => {
         // console.log("option", mqttOption);
         setUsername(mqttOption.username);
         setClient(client);
+
+        // setTimeout(() => {
+        //   if (client) {
+            
+        //   }
+        // }, 1000);
+        
         
       };
     
@@ -30,7 +37,13 @@ const HookMqtt = () => {
             } else {
               setConnectStatus('Connected');
               console.log("Connected");
+
+              // mqttSubscribe('game-list-board');
+              setTopicName("game-list-board");
+              client.subscribe("game-list-board")
             }
+            mqttSubscribe('game-list-board');
+            setTopicName("game-list-board");
             
           });
           client.on('error', (err) => {
@@ -38,9 +51,10 @@ const HookMqtt = () => {
             client.end();
           });
           client.on('message', (topic, message) => {
-            // console.log(username);
+            console.log("msg");
             let payload = JSON.parse(message.toString());
             payload.topic = topic;
+            console.log("msg:", payload);
             // const payload = { topic, username, message: message.toString() };
             // console.log("payload", payload);
             setPayload(payload);
@@ -50,18 +64,23 @@ const HookMqtt = () => {
 
     const mqttSubscribe = (topic) => {
       
-      client.subscribe(topic, (err) => {
-        if (err) {
-          console.log(err);
-          return;
-        }
-          
-
-        setIsSub(true);
-      })
+      if (client) {
+        console.log("sub");
+        client.subscribe(topic, (err) => {
+          if (err) {
+            console.log(err);
+            return;
+          }
+            
+          if (topic !== "game-list-board")
+            setIsSub(true);
+        })
+      }
+      
     }
 
     const mqttPublish = (topic, message) => {
+      console.log("pub");
       client.publish(topic, message, (err) => {
         if (err) {
           console.log("Error: ", err);
@@ -76,6 +95,9 @@ const HookMqtt = () => {
             } else {
               return (<GameList subscribe={mqttSubscribe}
                 setTopic={setTopicName}
+                publish={mqttPublish}
+                username={username}
+                payload={payload}
               />)
             }
               

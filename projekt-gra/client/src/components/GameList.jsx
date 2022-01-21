@@ -2,10 +2,15 @@ import {v4 as uuidv4 } from 'uuid';
 import { connect } from "react-redux";
 import { addGameAction, getGameList } from '../actions/gameActions';
 import { useEffect } from 'react';
+import { useRef } from 'react';
+import GameListBoard from './GameListBoard';
 
-const GameList = ({subscribe, setTopic, addGameAction, getGameList}) => {
+const GameList = ({client, subscribe, publish, payload, username, setTopic, addGameAction, getGameList}) => {
+    const inputRoomId = useRef(null);
+    
+
     useEffect(() => {
-        getGameList();
+        //getGameList();
     }, [])
 
     const handleSubscribe = (topic) => {
@@ -18,11 +23,24 @@ const GameList = ({subscribe, setTopic, addGameAction, getGameList}) => {
         const roomTopic = "game" + uuidv4()
 
         console.log("roomTopic: ", roomTopic);
+        publish('game-list-board', JSON.stringify({username, roomTopic, type: "create-room"}))
         handleSubscribe(roomTopic);
         addGameAction(roomTopic);
+
+        
     }
+
+    const handleJoinRoom = () => {
+        const roomId = inputRoomId.current.value;
+        publish('game-list-board', JSON.stringify({username, roomTopic: roomId, type: "join-room"}))
+        handleSubscribe(roomId);
+    }
+
     return ( 
         <div >
+            <GameListBoard payload={payload}/>
+            Id pokoju: <input type="text" ref={inputRoomId}/><button onClick={handleJoinRoom}>Dołącz</button>
+
             <button onClick={createRoom}>+ Stwórz nowy pokój</button>
             <div>Game 1
                 <button onClick={() => handleSubscribe('game1-chat')}>Dołącz</button>
