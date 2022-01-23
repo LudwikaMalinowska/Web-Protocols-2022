@@ -88,10 +88,23 @@ const HookMqtt = () => {
       })
     }
 
+    const mqttUnSub = (topic) => {
+      if (client) {
+        client.unsubscribe(topic, error => {
+          if (error) {
+            console.log('Unsubscribe error', error)
+            return
+          }
+          setIsSub(false);
+        });
+      }
+    };
+
     const content = () => {
         if (connectStatus === "Connected"){
             if (isSubed){
-              return (<GameBoard topic={topicName} publish={mqttPublish} payload={payload} username={username}/>)
+              return (<GameBoard topic={topicName} publish={mqttPublish} unsubscribe={mqttUnSub}
+              payload={payload} username={username}/>)
             } else {
               return (<GameList subscribe={mqttSubscribe}
                 setTopic={setTopicName}
