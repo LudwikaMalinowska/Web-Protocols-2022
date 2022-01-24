@@ -1,10 +1,17 @@
 import React, { createContext, useEffect, useState } from 'react';
 import mqtt from 'mqtt';
+import { connect } from "react-redux";
 import Connect from './Connect';
 import GameList from './GameList';
 import GameBoard from './GameBoard';
+import { getGameList } from '../actions/gameActions';
 
-const HookMqtt = () => {
+
+const HookMqtt = ({games, getGameList}) => {
+
+    useEffect(() => {
+      getGameList();
+    }, [])
 
     const [client, setClient] = useState(null);
     const [isSubed, setIsSub] = useState(false);
@@ -103,7 +110,9 @@ const HookMqtt = () => {
     const content = () => {
         if (connectStatus === "Connected"){
             if (isSubed){
-              return (<GameBoard topic={topicName} publish={mqttPublish} unsubscribe={mqttUnSub}
+
+              const game = games.find(game => game.gameId === topicName);
+              return (<GameBoard game={game} topic={topicName} publish={mqttPublish} unsubscribe={mqttUnSub}
               payload={payload} username={username}/>)
             } else {
               return (<GameList subscribe={mqttSubscribe}
@@ -127,4 +136,15 @@ const HookMqtt = () => {
      );
 }
  
-export default HookMqtt;
+const mapStateToProps = (state) => {
+  console.log(state);
+  return {
+      games: state.games
+  }
+}
+
+const mapDispatchToProps = {
+  getGameList
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(HookMqtt);

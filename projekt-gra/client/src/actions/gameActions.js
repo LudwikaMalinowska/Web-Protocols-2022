@@ -109,13 +109,15 @@ export const deleteGame = (id) => {
     }
 }
 
-export const updateGame = (id) => {
+export const updateGame = (id, updatedGame) => {
+    console.log("upd");
     return async dispatch => {
         dispatch(updateGameStartAction);
-        console.log('Delete game action');
+        console.log('Update game action');
         setTimeout(async () => {
             try{
-                const response = await axios.put(`http://localhost:5000/games/${id}`);
+                const response = await axios.put(`http://localhost:5000/games/${id}`, updatedGame);
+                console.log(response);
                 dispatch(updateGameAction(response.data));        
             }catch(ex) {
                 dispatch(updateGameFailAction(ex));

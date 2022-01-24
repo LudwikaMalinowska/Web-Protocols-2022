@@ -25,7 +25,7 @@ const GameList = ({games, client, subscribe, publish, payload, username, setTopi
         console.log("roomTopic: ", roomTopic);
         publish('game-list-board', JSON.stringify({username, roomTopic, type: "create-room"}))
         handleSubscribe(roomTopic);
-        addGame({gameId: roomTopic});
+        addGame({gameId: roomTopic, gameName: "Bez Nazwy"});
 
         
     }

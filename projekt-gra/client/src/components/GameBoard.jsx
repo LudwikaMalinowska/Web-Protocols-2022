@@ -3,8 +3,11 @@ import { connect } from "react-redux";
 import Board from "../Board";
 import Chatbox from "../Chatbox";
 import { deleteGame } from "../actions/gameActions";
+import { useState } from "react";
+import EditRoom from "./EditRoom";
 
-const GameBoard = ({topic, publish, unsubscribe, payload, username, deleteGame}) => {
+const GameBoard = ({game, topic, publish, unsubscribe, payload, username, deleteGame}) => {
+    const [editing, setEditing] = useState(false);
 
     const handleUnsub = () => {
         unsubscribe(topic);
@@ -17,8 +20,10 @@ const GameBoard = ({topic, publish, unsubscribe, payload, username, deleteGame})
         
     }
 
+    
     return ( 
         <div className="room">
+        <h3>{game ? game.gameName : ""}</h3>
             <div className="game-box">
             <button onClick={handleUnsub} style={{"height": "70%"}}>{"<--"}</button>
             <Board/>
@@ -26,6 +31,8 @@ const GameBoard = ({topic, publish, unsubscribe, payload, username, deleteGame})
             </div>
 
             <button onClick={handleDeleteRoom}>Usuń pokój</button>
+            <button onClick={() => setEditing(true)}>Edytuj pokój</button>
+            {editing && <EditRoom game={{topic}} setEditing={setEditing}/>}
         </div>
         
      );

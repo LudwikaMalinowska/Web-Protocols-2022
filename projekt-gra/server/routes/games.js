@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const router = express.Router();
 
 const Game = require("../models/Game");
+const User = require("../models/User");
 
 router.get('/', async (req, res) => {
     const query = Game.find({});
@@ -14,9 +15,26 @@ router.get('/', async (req, res) => {
     })
   });
 
+router.get('/:gameId', async (req, res) => {
+  // return res.send({});
+  const gameId = req.params.gameId;
+  const query = User.find({"gameId": gameId})
+  query.exec(function (err, game) {
+    if (err) throw err;
+    if (game !== null)
+      return res.send(game);
+    else {
+      console.log("Game not found");
+      res.status(404).json({error: "Game not found"})
+    }
+  })
+});
+
+
 router.post('/', async (req, res) => {
   const newGame = new Game({
     "gameId": req.body.gameId,
+    "gameName": req.body.gameName || "Bez Nazwy"
   });
   console.log("ngame", newGame)
   newGame.save()
@@ -43,6 +61,31 @@ router.delete('/:gameId', async (req, res) => {
     }
   })
 })
+
+router.put("/:gameId", async (req, res) => {
+  console.log("---put")
+  const gameId = req.params.gameId;
+  const updatedGame = {
+    "gameName": req.body.gameName
+  }
+  const query = Game.findOneAndUpdate({"gameId": gameId}, {
+    $set: updatedGame
+  });
+  query.exec(function (err, game) {
+    if (err) console.log(err);
+    if (game !== null) {
+      return res.send({
+        ...updatedGame,
+        "gameId": gameId
+      });
+    }
+    else {
+      console.log("Game not found");
+      res.status(404).json({error: "Game not found"})
+    }
+  })
+})
+
 
 
 module.exports = router;

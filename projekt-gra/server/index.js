@@ -10,7 +10,12 @@ app.use(express.json());
 
 
 const games = require("./routes/games")
+const gameUsers = require("./routes/gameUsers");
+
 app.use('/games', games);
+app.use('/games', gameUsers);
+
+
 
 require('dotenv').config();
 const dbConnData = {
