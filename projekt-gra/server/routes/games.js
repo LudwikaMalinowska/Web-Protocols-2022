@@ -18,7 +18,7 @@ router.get('/', async (req, res) => {
 router.get('/:gameId', async (req, res) => {
   // return res.send({});
   const gameId = req.params.gameId;
-  const query = User.find({"gameId": gameId})
+  const query = Game.findOne({"gameId": gameId})
   query.exec(function (err, game) {
     if (err) throw err;
     if (game !== null)

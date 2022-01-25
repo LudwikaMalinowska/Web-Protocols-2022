@@ -1,22 +1,33 @@
 import {v4 as uuidv4 } from 'uuid';
 import { connect } from "react-redux";
 import { addGame, getGameList } from '../actions/gameActions';
+import { getUserList} from '../actions/userActions';
 import { useEffect } from 'react';
 import { useRef } from 'react';
 import GameListBoard from './GameListBoard';
+import { addUserToGame } from '../actions/gameUserActions';
 
-const GameList = ({games, client, subscribe, publish, payload, username, setTopic, addGame, getGameList}) => {
+const GameList = ({games, client, subscribe, publish, payload, username, setTopic, addGame, getGameList, getUserList, addUserToGame}) => {
     const inputRoomId = useRef(null);
     
 
     useEffect(() => {
         getGameList();
+        getUserList();
     }, [])
 
     const handleSubscribe = (topic) => {
         subscribe(topic);
         console.log("Subscribed to " + topic);
         setTopic(topic);
+        //adduser
+
+        const user = {
+            userId: client.options.clientId,
+            username: username
+        }
+        addUserToGame(topic, user);
+        console.log("client", client);
     }
 
     const createRoom = () => {
@@ -26,7 +37,8 @@ const GameList = ({games, client, subscribe, publish, payload, username, setTopi
         publish('game-list-board', JSON.stringify({username, roomTopic, type: "create-room"}))
         handleSubscribe(roomTopic);
         addGame({gameId: roomTopic, gameName: "Bez Nazwy"});
-
+        //aduser
+        // addUserToGame(roomTopic, client.clientId)
         
     }
 
@@ -67,13 +79,16 @@ const GameList = ({games, client, subscribe, publish, payload, username, setTopi
 const mapStateToProps = (state) => {
     console.log(state);
     return {
-        games: state.games
+        games: state.games,
+        users: state.users
     }
 }
 
 const mapDispatchToProps = {
     addGame,
-    getGameList
+    getGameList,
+    getUserList,
+    addUserToGame
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(GameList);

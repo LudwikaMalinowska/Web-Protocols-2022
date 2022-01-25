@@ -5,12 +5,14 @@ import Connect from './Connect';
 import GameList from './GameList';
 import GameBoard from './GameBoard';
 import { getGameList } from '../actions/gameActions';
+import { addUser, deleteUser, getUserList } from '../actions/userActions';
 
 
-const HookMqtt = ({games, getGameList}) => {
+const HookMqtt = ({games, getGameList, getUserList, addUser, deleteUser}) => {
 
     useEffect(() => {
       getGameList();
+      getUserList();
     }, [])
 
     const [client, setClient] = useState(null);
@@ -23,18 +25,9 @@ const HookMqtt = ({games, getGameList}) => {
     const mqttConnect = (host, mqttOption) => {
         setConnectStatus('Connected');
         const client = mqtt.connect(host, mqttOption);
-        // console.log("option", mqttOption);
         setUsername(mqttOption.username);
-        setClient(client);
-
-        // setTimeout(() => {
-        //   if (client) {
-            
-        //   }
-        // }, 1000);
-        
-        
-      };
+        setClient(client);        
+    };
     
       useEffect(() => {
         if (client) {
@@ -47,11 +40,16 @@ const HookMqtt = ({games, getGameList}) => {
 
               // mqttSubscribe('game-list-board');
               setTopicName("game-list-board");
-              client.subscribe("game-list-board")
+              client.subscribe("game-list-board");
             }
             mqttSubscribe('game-list-board');
             setTopicName("game-list-board");
-            
+
+            const user = {
+              userId: client.options.clientId,
+              username: username
+            }
+            addUser(user);
           });
           client.on('error', (err) => {
             console.error('Connection error: ', err);
@@ -66,6 +64,9 @@ const HookMqtt = ({games, getGameList}) => {
             // console.log("payload", payload);
             setPayload(payload);
           });
+          client.on('offline', () => {
+            deleteUser(client.options.userId);
+          })
         }
       }, [client]);
 
@@ -113,13 +114,16 @@ const HookMqtt = ({games, getGameList}) => {
 
               const game = games.find(game => game.gameId === topicName);
               return (<GameBoard game={game} topic={topicName} publish={mqttPublish} unsubscribe={mqttUnSub}
-              payload={payload} username={username}/>)
+              payload={payload} username={username}
+              client={client}
+              />)
             } else {
               return (<GameList subscribe={mqttSubscribe}
                 setTopic={setTopicName}
                 publish={mqttPublish}
                 username={username}
                 payload={payload}
+                client={client}
               />)
             }
               
@@ -144,7 +148,10 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-  getGameList
+  getGameList,
+  getUserList,
+  addUser,
+  deleteUser
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(HookMqtt);

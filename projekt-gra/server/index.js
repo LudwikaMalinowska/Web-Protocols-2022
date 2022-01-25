@@ -11,9 +11,11 @@ app.use(express.json());
 
 const games = require("./routes/games")
 const gameUsers = require("./routes/gameUsers");
+const users = require("./routes/users");
 
 app.use('/games', games);
 app.use('/games', gameUsers);
+app.use('/users', users);
 
 
 
