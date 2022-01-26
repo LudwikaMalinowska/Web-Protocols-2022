@@ -51,6 +51,7 @@ router.post('/', async (req, res) => {
 });
 
 router.delete('/:userId', async (req, res) => {
+  console.log("delete")
   const userId = req.params.userId;
   console.log(userId)
   const query = User.deleteOne({"userId": userId});

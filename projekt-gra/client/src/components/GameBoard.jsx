@@ -7,6 +7,7 @@ import { deleteGame } from "../actions/gameActions";
 
 import EditRoom from "./EditRoom";
 import { getGameUserList, deleteUserFromGame } from "../actions/gameUserActions";
+import UsersInGameBox from "./UsersInGameBox";
 
 const GameBoard = ({game, users, gameUsers, topic, client,publish, unsubscribe, payload, username, deleteGame, getGameUserList, deleteUserFromGame}, props) => {
     const [editing, setEditing] = useState(false);
@@ -20,6 +21,7 @@ const GameBoard = ({game, users, gameUsers, topic, client,publish, unsubscribe, 
     const handleUnsub = () => {
         unsubscribe(topic);
         deleteUserFromGame(topic, client.options.clientId);
+        publish(topic, JSON.stringify({username, roomTopic: topic, type: "leave-room"}))
     };
 
     const handleDeleteRoom = () => {
@@ -34,14 +36,21 @@ const GameBoard = ({game, users, gameUsers, topic, client,publish, unsubscribe, 
         <div className="room">
         <h3>{game ? game.gameName : ""}</h3>
             <div className="game-box">
-            <button onClick={handleUnsub} style={{"height": "70%"}}>{"<--"}</button>
+            <button onClick={handleUnsub} >{"<--"}</button>
             <Board/>
             <Chatbox topic={topic} publish={publish} payload={payload} username={username}/>
             </div>
 
+            
             <button onClick={handleDeleteRoom}>Usuń pokój</button>
             <button onClick={() => setEditing(true)}>Edytuj pokój</button>
             {editing && <EditRoom game={{topic}} setEditing={setEditing}/>}
+
+            <UsersInGameBox topic={topic}
+                username={username}
+                publish={publish}
+                client={client}
+            />
         </div>
         
      );

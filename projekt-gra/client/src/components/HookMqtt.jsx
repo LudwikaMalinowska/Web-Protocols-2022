@@ -64,7 +64,7 @@ const HookMqtt = ({games, getGameList, getUserList, addUser, deleteUser}) => {
             // console.log("payload", payload);
             setPayload(payload);
           });
-          client.on('offline', () => {
+          client.on('disconnect', () => {
             deleteUser(client.options.userId);
           })
         }
@@ -90,6 +90,7 @@ const HookMqtt = ({games, getGameList, getUserList, addUser, deleteUser}) => {
     const mqttPublish = (topic, message) => {
       console.log("pub");
       client.publish(topic, message, (err) => {
+        console.log("---msg", message);
         if (err) {
           console.log("Error: ", err);
         }

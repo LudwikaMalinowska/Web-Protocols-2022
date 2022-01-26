@@ -11,3 +11,12 @@
 
 }
 
+.users-in-game-box {
+  height: 200px;
+  width: 200px;
+  background-color: lightblue;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  font-size: 14px;
+}
+

@@ -12,12 +12,15 @@ const GameList = ({games, client, subscribe, publish, payload, username, setTopi
     
 
     useEffect(() => {
-        getGameList();
-        getUserList();
+        setInterval(() => {
+            getGameList();
+            getUserList();
+        }, 300000);
     }, [])
 
     const handleSubscribe = (topic) => {
         subscribe(topic);
+        subscribe(client.options.clientId);
         console.log("Subscribed to " + topic);
         setTopic(topic);
         //adduser
@@ -27,7 +30,8 @@ const GameList = ({games, client, subscribe, publish, payload, username, setTopi
             username: username
         }
         addUserToGame(topic, user);
-        console.log("client", client);
+        publish(topic, JSON.stringify({username, roomTopic: topic, type: "join-room"}))
+        
     }
 
     const createRoom = () => {
@@ -37,15 +41,14 @@ const GameList = ({games, client, subscribe, publish, payload, username, setTopi
         publish('game-list-board', JSON.stringify({username, roomTopic, type: "create-room"}))
         handleSubscribe(roomTopic);
         addGame({gameId: roomTopic, gameName: "Bez Nazwy"});
-        //aduser
-        // addUserToGame(roomTopic, client.clientId)
         
     }
 
     const handleJoinRoom = () => {
         const roomId = inputRoomId.current.value;
-        publish('game-list-board', JSON.stringify({username, roomTopic: roomId, type: "join-room"}))
         handleSubscribe(roomId);
+        publish(roomId, JSON.stringify({username, roomTopic: roomId, type: "join-room"}))
+        
     }
 
     const showAllGames = (games) => {

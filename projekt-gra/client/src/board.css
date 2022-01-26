@@ -15,17 +15,17 @@
 .game-box {
     display: flex;
     flex-direction: row;
-    height: 100%;
+    height: 60vh;
     width: 100%;
     margin-left: "20px";
-    
+    margin-bottom: 10px;
 }
 
 .board {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 70%;
+    height: 100%;
     width: 60%;
     background-color: yellowgreen;
 }
