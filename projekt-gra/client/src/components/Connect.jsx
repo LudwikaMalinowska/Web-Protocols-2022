@@ -5,14 +5,16 @@ import mqtt from 'mqtt';
 
 
 const userSchema = Yup.object().shape({
-    username: Yup.string().required()
+    username: Yup.string().required(),
+    password: Yup.string().required()
 })
 
 const initialValues = {
     username: '',
     host: 'localhost',
     port: 1883,
-    clientId: uuidv4()
+    clientId: uuidv4(),
+    password: ''
 }
 
 
@@ -21,7 +23,7 @@ const Connect = ({connect}) => {
 
     const handleSubmit = (values) => {
         console.log(values);
-        const { host, clientId, port, username } = values;
+        const { host, clientId, port, username, password } = values;
         // const url = `ws://broker.emqx.io:8083/mqtt`;
         const url = `mqtt://localhost:8000/mqtt`;
 
@@ -29,7 +31,7 @@ const Connect = ({connect}) => {
             keepalive: 30,
             clientId: clientId,
             protocolId: 'MQTT',
-            protocolVersion: 4,
+            protocolVersion: 5,
             clean: true,
             reconnectPeriod: 1000,
             connectTimeout: 30 * 1000,
@@ -43,6 +45,7 @@ const Connect = ({connect}) => {
           }
 
           options.username = username;
+          options.password = password;
 
           connect(url, options);
     }
@@ -56,11 +59,22 @@ const Connect = ({connect}) => {
             enableReinitialize={true}>
         <Form className="connect-form">
         
+        <div>
         <label >Login: </label>
             <Field name="username"></Field>
             <ErrorMessage name="username" component="div"/>
+        </div>
+        
+        <div>
+        <label >Hasło: </label>
+            <Field name="password" type="password"></Field>
+            <ErrorMessage name="password" component="div"/>
+
             
-            <button type="submit">Połącz</button>
+        </div>
+        <button type="submit">Połącz</button>
+            
+            
         
         </Form>
 

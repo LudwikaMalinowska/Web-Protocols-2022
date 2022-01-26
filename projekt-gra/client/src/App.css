@@ -20,3 +20,14 @@
   font-size: 14px;
 }
 
+.connect-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.connect-form button {
+  margin-top: 10px;
+  width: 70px;
+}
+

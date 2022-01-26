@@ -6,9 +6,13 @@ import { useEffect } from 'react';
 import { useRef } from 'react';
 import GameListBoard from './GameListBoard';
 import { addUserToGame } from '../actions/gameUserActions';
+import { useState } from 'react';
+import SettingsForm from './SettingsForm';
 
-const GameList = ({games, client, subscribe, publish, payload, username, setTopic, addGame, getGameList, getUserList, addUserToGame}) => {
+const GameList = ({games, client, subscribe, publish, disconnect, payload, username, setUsername, setTopic, addGame, getGameList, getUserList, addUserToGame}) => {
     const inputRoomId = useRef(null);
+    const [changingSettings, setChangingSettings] = useState(false);
+    
     
 
     useEffect(() => {
@@ -27,7 +31,8 @@ const GameList = ({games, client, subscribe, publish, payload, username, setTopi
 
         const user = {
             userId: client.options.clientId,
-            username: username
+            username: username,
+            password: client.options.password
         }
         addUserToGame(topic, user);
         publish(topic, JSON.stringify({username, roomTopic: topic, type: "join-room"}))
@@ -65,14 +70,31 @@ const GameList = ({games, client, subscribe, publish, payload, username, setTopi
 
         return content;
     }
+    
+
+    let user = {};
+    if (client){
+        user = {
+            userId: client.options.clientId,
+            username: username,
+            password: client.options.password
+        }
+    }
 
     return ( 
         <div >
+            <p>Nazwa użytkownika: {username}</p>
+            <button onClick={disconnect}>Wyloguj</button>
+            <button onClick={() => setChangingSettings(true)}>Zmień nazwę</button>
+            {changingSettings && <SettingsForm user={user}
+                setChangingSettings={setChangingSettings}
+                setUsername={setUsername}
+            />}
             <GameListBoard payload={payload}/>
             Id pokoju: <input type="text" ref={inputRoomId}/><button onClick={handleJoinRoom}>Dołącz</button>
+            
 
             <button onClick={createRoom}>+ Stwórz nowy pokój</button>
-
 
             {showAllGames(games)}
         </div>

@@ -37,7 +37,8 @@ router.get('/:userId', async (req, res) => {
 router.post('/', async (req, res) => {
   const newUser = new User({
     "userId": req.body.userId,
-    "username": req.body.username
+    "username": req.body.username,
+    "password": req.body.password
   });
   //console.log("ngame", newGame)
   newUser.save()

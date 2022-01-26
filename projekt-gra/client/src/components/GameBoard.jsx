@@ -62,7 +62,7 @@ const mapStateToProps = (state, props) => {
     console.log("props:", props);
     return {
         games: state.games,
-        game: state.game,
+        // game: state.game,
         users: state.users,
         gameUsers: state.gameUsers
     }

@@ -21,6 +21,7 @@ const HookMqtt = ({games, getGameList, getUserList, addUser, deleteUser}) => {
     const [username, setUsername] = useState('');
     const [payload, setPayload] = useState({});
     const [connectStatus, setConnectStatus] = useState('Connect');
+    const [userId, setUserId] = useState(null);
 
     const mqttConnect = (host, mqttOption) => {
         setConnectStatus('Connected');
@@ -47,9 +48,11 @@ const HookMqtt = ({games, getGameList, getUserList, addUser, deleteUser}) => {
 
             const user = {
               userId: client.options.clientId,
-              username: username
+              username: username,
+              password: client.options.password
             }
             addUser(user);
+            setUserId(user.userId);
           });
           client.on('error', (err) => {
             console.error('Connection error: ', err);
@@ -64,8 +67,12 @@ const HookMqtt = ({games, getGameList, getUserList, addUser, deleteUser}) => {
             // console.log("payload", payload);
             setPayload(payload);
           });
-          client.on('disconnect', () => {
-            deleteUser(client.options.userId);
+          client.on('close', () => {
+            // if (client) {
+              deleteUser(userId);
+              
+            // }
+              
           })
         }
       }, [client]);
@@ -109,6 +116,18 @@ const HookMqtt = ({games, getGameList, getUserList, addUser, deleteUser}) => {
       }
     };
 
+    const mqttDisconnect = () => {
+      if (client) {
+        client.end()
+        setClient(null);
+        setIsSub(false);
+        setTopicName(null);
+        setUsername('');
+        setPayload({});
+        setConnectStatus('Connect');
+      }
+    }
+
     const content = () => {
         if (connectStatus === "Connected"){
             if (isSubed){
@@ -125,6 +144,8 @@ const HookMqtt = ({games, getGameList, getUserList, addUser, deleteUser}) => {
                 username={username}
                 payload={payload}
                 client={client}
+                disconnect={mqttDisconnect}
+                setUsername={setUsername}
               />)
             }
               
