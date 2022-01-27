@@ -45,7 +45,7 @@ const HookMqtt = ({games, getGameList, getUserList, addUser, deleteUser}) => {
             }
             mqttSubscribe('game-list-board');
             setTopicName("game-list-board");
-
+            mqttPublish('game-list-board', JSON.stringify({username, type: "log-in"}))  
             const user = {
               userId: client.options.clientId,
               username: username,
@@ -53,6 +53,7 @@ const HookMqtt = ({games, getGameList, getUserList, addUser, deleteUser}) => {
             }
             addUser(user);
             setUserId(user.userId);
+            
           });
           client.on('error', (err) => {
             console.error('Connection error: ', err);
@@ -150,7 +151,10 @@ const HookMqtt = ({games, getGameList, getUserList, addUser, deleteUser}) => {
             }
               
         } else {
-            return (<Connect connect={mqttConnect}/>);
+            return (<Connect 
+            connect={mqttConnect}
+            publish={mqttPublish}
+            />);
         }
     }
 

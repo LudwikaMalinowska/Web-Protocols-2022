@@ -19,7 +19,7 @@ const initialValues = {
 
 
 
-const Connect = ({connect}) => {
+const Connect = ({connect, publish}) => {
 
     const handleSubmit = (values) => {
         console.log(values);
@@ -48,6 +48,7 @@ const Connect = ({connect}) => {
           options.password = password;
 
           connect(url, options);
+        //   publish('game-list-board', JSON.stringify({username, type: "log-in"}))  
     }
 
     return ( 

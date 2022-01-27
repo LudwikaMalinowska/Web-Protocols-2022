@@ -20,6 +20,9 @@ const GameListBoard = ({payload}) => {
             } else if (item.type === "join-room") {
                 return (<p>[[ Gracz {item.username} dołączył do pokoju o id: <br/> {item.roomTopic}]]</p>)
             }
+            else if (item.type === "log-in") {
+                return (<p>{`[${item.username} zalogował się.]`}</p>)
+            }
         } )
 
         return m;

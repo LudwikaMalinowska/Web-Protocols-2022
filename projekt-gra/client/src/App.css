@@ -31,3 +31,21 @@
   width: 70px;
 }
 
+.game-list p.small {
+  font-size: 12px;
+}
+
+.logged-in-board {
+  height: 30vh;
+  width: 200px;
+  background-color: lightblue;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  font-size: 14px;
+}
+
+.boards {
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+}

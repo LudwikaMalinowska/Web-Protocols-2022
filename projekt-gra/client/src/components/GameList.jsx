@@ -8,8 +8,9 @@ import GameListBoard from './GameListBoard';
 import { addUserToGame } from '../actions/gameUserActions';
 import { useState } from 'react';
 import SettingsForm from './SettingsForm';
+import LoggedInBoard from './LoggedInBoard';
 
-const GameList = ({games, client, subscribe, publish, disconnect, payload, username, setUsername, setTopic, addGame, getGameList, getUserList, addUserToGame}) => {
+const GameList = ({users, games, client, subscribe, publish, disconnect, payload, username, setUsername, setTopic, addGame, getGameList, getUserList, addUserToGame}) => {
     const inputRoomId = useRef(null);
     const [changingSettings, setChangingSettings] = useState(false);
     
@@ -60,7 +61,8 @@ const GameList = ({games, client, subscribe, publish, disconnect, payload, usern
         const content = games.map(game => {
             return (
                 <div>
-                    <p>Id: {game.gameId}</p>
+                    <p>{game.gameName}</p>
+                    <p className='small'>Id: {game.gameId}</p>
                     <button
                     onClick={() => handleSubscribe(`${game.gameId}`)}
                     >Dołącz</button>
@@ -90,13 +92,20 @@ const GameList = ({games, client, subscribe, publish, disconnect, payload, usern
                 setChangingSettings={setChangingSettings}
                 setUsername={setUsername}
             />}
+            <div className='boards'>
             <GameListBoard payload={payload}/>
+            <LoggedInBoard users={users}/>
+            </div>
+            
             Id pokoju: <input type="text" ref={inputRoomId}/><button onClick={handleJoinRoom}>Dołącz</button>
             
 
             <button onClick={createRoom}>+ Stwórz nowy pokój</button>
 
+            <div className='game-list'>
             {showAllGames(games)}
+            </div>
+            
         </div>
      );
 }
