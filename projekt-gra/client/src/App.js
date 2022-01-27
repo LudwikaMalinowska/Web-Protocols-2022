@@ -1,8 +1,5 @@
 
 import './App.css';
-import Board from './Board';
-import Chatbox from './Chatbox';
-import Connect from './components/Connect';
 import HookMqtt from './components/HookMqtt';
 
 function App() {

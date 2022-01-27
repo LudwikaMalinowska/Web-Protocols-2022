@@ -1,5 +1,5 @@
 import Chat from "./Chat";
-import "./chatbox.css";
+import "./../chatbox.css";
 
 
 const Chatbox = ({topic, publish, payload, username}) => {

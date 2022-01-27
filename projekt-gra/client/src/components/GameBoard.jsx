@@ -1,8 +1,8 @@
 import { connect } from "react-redux";
 import { useEffect, useState } from 'react';
 
-import Board from "../Board";
-import Chatbox from "../Chatbox";
+import Board from "./Board";
+import Chatbox from "./Chatbox";
 import { deleteGame } from "../actions/gameActions";
 
 import EditRoom from "./EditRoom";

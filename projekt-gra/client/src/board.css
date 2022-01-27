@@ -23,13 +23,28 @@
 
 .board {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
     height: 100%;
     width: 60%;
     background-color: yellowgreen;
 }
+
+.rolling {
+    display: flex;
+    flex-direction: column;
+}
+
+.score-table, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+td {
+    padding: 4px 10px;
+}
+
 
 .dice {
     height: 50px;
