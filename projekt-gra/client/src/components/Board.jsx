@@ -3,10 +3,29 @@ import "./../board.css";
 
 const _ = require("lodash");
 
+const pointsInit = {
+    '1': {value: 0, clicked: false},
+    '2': {value: 0, clicked: false},
+    '3': {value: 0, clicked: false},
+    '4': {value: 0, clicked: false},
+    '5': {value: 0, clicked: false},
+    '6': {value: 0, clicked: false},
+    'x3': {value: 0, clicked: false},
+    'x4': {value: 0, clicked: false},
+    'mały strit': {value: 0, clicked: false},
+    'duży strit': {value: 0, clicked: false}, 
+    'generał': {value: 0, clicked: false}
+};
 
 const Board = () => {
     const [dices, setDices] = useState([1,2,3,4,5]);
     // const dices = [1,2,3,4,5];
+    const [points, setPoints] = useState(pointsInit);
+
+    const sumPoints = Object.values(points).reduce((acc, field) => {
+        return acc + field.value;
+    }, 0)
+
     const rollDiceNr = () => Math.floor(Math.random() * 6 + 1);
 
     const rollDices = () => {
@@ -21,9 +40,11 @@ const Board = () => {
         <div className="dice">{dice}</div>
     ))
 
-    const countPoints = (dices, number) => {
-        const occurency = _.countBy(dices, dice => dice === number);
+    const countNumberField = (dices, number) => {
+        let occurency = _.countBy(dices)[number];
+        occurency = occurency ? occurency : 0;
 
+        // console.log(occurency);
         return occurency * number;
     }
 
@@ -31,15 +52,16 @@ const Board = () => {
         return dices.every(dice => dice === dices[0])
     }
 
-    // console.log(ifGeneral(dices));
 
     const ifBigStrit = (dices) => {
-        const sorted = _.sortBy(dices, (d1, d2) => d1 - d2);
+        const sorted = [...dices];
+        sorted.sort();
+        console.log("s", sorted);
         let ifB = true;
         for (let i = 1; i < dices.length; i++){
-            if (sorted[i-1] !== sorted[i] + 1){
-                ifB = false;
-                break;
+            if (sorted[i-1] + 1 !== sorted[i]){
+                
+                return false;
             }
         }
 
@@ -47,77 +69,92 @@ const Board = () => {
     }
 
     const ifSmallStrit = dices => {
-        const nDices = new Array(new Set(dices));
-
-        return ifBigStrit(nDices);
+        let nDices = Array.from(new Set(dices));
+        console.log(nDices);
+        if (nDices.length < 4)
+            return false;
+        else
+            return ifBigStrit(nDices);
     }
+
+    const countPoints = (field, dices) => {
+        switch (field){
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+                return countNumberField(dices, Number(field));
+            case 'mały strit':
+                const ifS = ifSmallStrit(dices);
+                if (ifS)
+                    return 30;
+                else
+                    return 0;
+            case 'duży strit':
+                const ifB = ifBigStrit(dices);
+                if (ifB)
+                    return 40;
+                else
+                    return 0;
+            case 'generał':
+                const ifG = ifGeneral(dices);
+                if (ifG)
+                    return 50;
+                else
+                    return 0;
+            default:
+                return 0;
+        }
+    }
+
+    const clickField = (field, showPoints) => {
+        console.log("click")
+        const points2 = 
+            JSON.parse(JSON.stringify(points));
+        points2[field].clicked = true;
+        points2[field].value = showPoints;
+        console.log(points2)
+        setPoints(points2); 
+    }
+
+    const fields =  ['1', '2', '3', '4', '5', '6', 'x3', 'x4', 'mały strit', 'duży strit', 'generał']
+    const tableContent = fields.map(field => {
+        const showPoints = countPoints(field, dices);
+        // const classN = field.clicked
+        if (points[field].clicked) {
+            return (
+                <tr>
+                    <td>{field}</td>
+                    <td className="black">{points[field].value}</td>
+                    <td>0</td>
+                </tr>
+            )
+        } else {
+            return (
+                <tr>
+                    <td>{field}</td>
+                    <td className="grey"
+                    onClick={() => {
+                        clickField(field, showPoints)
+                    }}
+                    >{showPoints}</td>
+                    <td>0</td>
+                </tr>
+            )
+        }
+        
+        
+    })
     
     return ( 
        <div className="board">
        <table className="score-table">
-        <tr>
-            <td>1</td>
-            <td>0</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>0</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <td>3</td>
-            <td>0</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <td>4</td>
-            <td>0</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <td>5</td>
-            <td>0</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <td>6</td>
-            <td>0</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <td>x3</td>
-            <td>0</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <td>x4</td>
-            <td>0</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <td>2+3</td>
-            <td>0</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <td>mały strit</td>
-            <td>0</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <td>duży strit</td>
-            <td>0</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <td>generał</td>
-            <td>0</td>
-            <td>0</td>
-        </tr>
+        {tableContent}
         <tr>
             <td>suma =</td>
-            <td>0</td>
+            <td>{sumPoints}</td>
             <td>0</td>
         </tr>
        </table>
