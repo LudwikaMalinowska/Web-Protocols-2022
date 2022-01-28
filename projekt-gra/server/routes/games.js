@@ -15,6 +15,30 @@ router.get('/', async (req, res) => {
     })
   });
 
+router.get('/searchName', async (req, res) => {
+  const searchedName = req.query.name;
+  const query = Game.find({"gameName" : {$regex : searchedName}});
+
+  query.exec(function (err, games) {
+    if (err) throw err;
+    return res.send({
+      games: games
+    })
+  })
+})
+
+router.get('/searchId', async (req, res) => {
+  const searchedId = req.query.id;
+  const query = Game.find({"gameId" : {$regex : searchedId}});
+
+  query.exec(function (err, games) {
+    if (err) throw err;
+    return res.send({
+      games: games
+    })
+  })
+})
+
 router.get('/:gameId', async (req, res) => {
   // return res.send({});
   const gameId = req.params.gameId;
