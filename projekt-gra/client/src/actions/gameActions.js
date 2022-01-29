@@ -61,6 +61,39 @@ export const updateGameFailAction = (error) => ({
     payload: error
 })
 
+//-------
+export const gameGetByNameAction = (users) => ({
+    type: "GAME_GET_BY_NAME",
+    payload: users
+})
+
+export const gameGetByNameStartAction = ({
+    type: "GAME_GET_BY_NAME_START"
+});
+
+export const gameGetByNameFailAction = (error) => ({
+    type: "GAME_GET_BY_NAME_FAILED",
+    payload: error
+})
+
+//-----
+export const gameGetByIdAction = (users) => ({
+    type: "GAME_GET_BY_ID",
+    payload: users
+})
+
+export const gameGetByIdStartAction = ({
+    type: "GAME_GET_BY_ID_START"
+});
+
+export const gameGetByIdFailAction = (error) => ({
+    type: "GAME_GET_BY_ID_FAILED",
+    payload: error
+})
+//-----
+
+
+
 export const getGameList = () => {
     return async dispatch => {
         dispatch(gamesListRequestStartAction);
@@ -72,6 +105,40 @@ export const getGameList = () => {
                 dispatch(gamesListRequestAction(response.data));        
             }catch(ex) {
                 dispatch(gamesListRequestFailAction(ex));
+            }
+        }, 1000)
+    }
+}
+
+export const getGamesByName = (name) => {
+    console.log('-action');
+    console.log(name);
+    return async dispatch => {
+        dispatch(gameGetByNameStartAction);
+        console.log('----action');
+        setTimeout(async () => {
+            try{
+                const response = await axios.get(`http://localhost:5000/games/searchName?name=${name}`);
+                console.log("-----res", response);
+                dispatch(gameGetByNameAction(response.data));        
+            }catch(ex) {
+                dispatch(gameGetByNameFailAction(ex));
+            }
+        }, 1000)
+    }
+}
+
+export const getGamesById = (id) => {
+    return async dispatch => {
+        dispatch(gameGetByIdStartAction);
+        // console.log('Create user action');
+        setTimeout(async () => {
+            try{
+                const response = await axios.get(`http://localhost:5000/games/searchId?id=${id}`);
+                console.log("res", response);
+                dispatch(gameGetByIdAction(response.data));        
+            }catch(ex) {
+                dispatch(gameGetByIdFailAction(ex));
             }
         }, 1000)
     }

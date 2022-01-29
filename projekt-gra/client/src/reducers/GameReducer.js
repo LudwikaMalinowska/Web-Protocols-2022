@@ -18,6 +18,23 @@ const gameReducer = (state = [], action) => {
             return state;
         case "GAME_LIST_REQUEST":
             return action.payload.allGames;
+
+        case "GAME_GET_BY_NAME":
+            console.log(action.payload);
+            return action.payload.games;
+        case "GAME_GET_BY_NAME_START":
+            return state;
+        case "GAME_GET_BY_NAME_FAILED":
+            return state;
+        
+        case "GAME_GET_BY_ID":
+            console.log(action.payload);
+            return action.payload.games;
+        case "GAME_GET_BY_ID_START":
+            return state;
+        case "GAME_GET_BY_ID_FAILED":
+            return state;
+        
         case "GAME_UPDATE":
             return state;
         case "GAME_UPDATE_START": 

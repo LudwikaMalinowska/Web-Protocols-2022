@@ -1,6 +1,6 @@
 import {v4 as uuidv4 } from 'uuid';
 import { connect } from "react-redux";
-import { addGame, getGameList } from '../actions/gameActions';
+import { addGame, getGameList, getGamesByName, getGamesById } from '../actions/gameActions';
 import { getUserList} from '../actions/userActions';
 import { useEffect } from 'react';
 import { useRef } from 'react';
@@ -10,11 +10,14 @@ import { useState } from 'react';
 import SettingsForm from './SettingsForm';
 import LoggedInBoard from './LoggedInBoard';
 
-const GameList = ({users, games, client, subscribe, publish, disconnect, payload, username, setUsername, setTopic, addGame, getGameList, getUserList, addUserToGame}) => {
+const GameList = ({users, games, client, subscribe, publish, disconnect, payload, username, setUsername, setTopic, addGame, getGameList, getUserList, addUserToGame, getGamesByName, getGamesById}) => {
     const inputRoomId = useRef(null);
     const [changingSettings, setChangingSettings] = useState(false);
-    
-    
+    const inputEl = useRef(null);
+    const nameButton = useRef(null);
+    const idButton = useRef(null);
+    // const [displayedGames, setDisplayedGames] = useState(games);
+    const [filterType, setFilterType] = useState('name');
 
     useEffect(() => {
         setInterval(() => {
@@ -72,6 +75,29 @@ const GameList = ({users, games, client, subscribe, publish, disconnect, payload
 
         return content;
     }
+
+    const filter = (value) => {
+        if (filterType === "name")
+            getGamesByName(value);
+        else if (filterType === "id")
+            getGamesById(value);
+    }
+
+    const clearFilters = () => {
+        getGameList();
+    }
+
+    const nameButtonClick = () => {
+        setFilterType("name");
+        nameButton.current.className = "active";
+        idButton.current.className = "";
+    }
+
+    const idButtonClick = () => {
+        setFilterType("id");
+        idButton.current.className = "active";
+        nameButton.current.className = "";
+    }
     
 
     let user = {};
@@ -102,6 +128,20 @@ const GameList = ({users, games, client, subscribe, publish, disconnect, payload
 
             <button onClick={createRoom}>+ Stwórz nowy pokój</button>
 
+            <div className='search'>
+                <label>Szukaj: </label>
+                <input type="text"
+                    ref={inputEl}
+                />
+                <button onClick={() => filter(inputEl.current.value)}>Filtruj</button>
+                <button onClick={nameButtonClick}
+                ref={nameButton}>Po nazwie</button>
+                <button onClick={idButtonClick}
+                ref={idButton}>Po id</button>
+                <button onClick={clearFilters}>Wyczyść filtry</button>
+            </div>
+            
+
             <div className='game-list'>
             {showAllGames(games)}
             </div>
@@ -122,7 +162,9 @@ const mapDispatchToProps = {
     addGame,
     getGameList,
     getUserList,
-    addUserToGame
+    addUserToGame, 
+    getGamesByName, 
+    getGamesById
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(GameList);
