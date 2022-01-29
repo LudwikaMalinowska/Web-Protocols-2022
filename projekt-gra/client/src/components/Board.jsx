@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./../board.css";
 
 const _ = require("lodash");
@@ -17,10 +17,19 @@ const pointsInit = {
     'generał': {value: 0, clicked: false}
 };
 
-const Board = () => {
+const Board = ({payload}) => {
+    const [messages, setMessages] = useState([]);
     const [dices, setDices] = useState([1,2,3,4,5]);
     // const dices = [1,2,3,4,5];
     const [points, setPoints] = useState(pointsInit);
+
+    useEffect(() => {
+        if (payload.topic) {
+          setMessages(messages => [...messages, payload])
+
+          console.log(payload);
+        }
+      }, [payload])
 
     const sumPoints = Object.values(points).reduce((acc, field) => {
         return acc + field.value;
@@ -117,6 +126,8 @@ const Board = () => {
         points2[field].value = showPoints;
         console.log(points2)
         setPoints(points2); 
+        //push move to moves
+        //game.board = board
     }
 
     const fields =  ['1', '2', '3', '4', '5', '6', 'x3', 'x4', 'mały strit', 'duży strit', 'generał']
