@@ -4,14 +4,14 @@ const GameListBoard = ({payload}) => {
     const [messages, setMessages] = useState([]);
 
     useEffect(() => {
-        console.log(payload);
+        // console.log(payload);
         if (payload.topic) {
           setMessages(messages => [...messages, payload])
         }
       }, [payload])
     
     const content = (messages) => {
-        console.log(messages);
+        // console.log(messages);
         const m = messages.map(item => {
             if (item.type === "create-room"){
                 return (<p>[Gracz {item.username} utworzył pokój o id: 

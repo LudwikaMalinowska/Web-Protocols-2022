@@ -14,8 +14,8 @@ const EditRoom = ({game, setEditing, updateGame}) => {
 
     const handleSubmit = (values) => {
         // const {roomName} = values;
-        console.log("submit");
-        console.log("game", game);
+        // console.log("submit");
+        // console.log("game", game);
         updateGame(game.topic, values)
         setEditing(false)
     }

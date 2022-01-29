@@ -1,4 +1,7 @@
 import { useState, useEffect } from "react";
+import { connect } from "react-redux";
+import { getGame } from "../actions/gameActions";
+import { addMove, getMoveList, deleteMove } from "../actions/moveActions";
 import "./../board.css";
 
 const _ = require("lodash");
@@ -17,19 +20,29 @@ const pointsInit = {
     'generał': {value: 0, clicked: false}
 };
 
-const Board = ({payload}) => {
-    const [messages, setMessages] = useState([]);
+const Board = ({game, username, addMove, getMoveList, getGame, deleteMove}) => {
+    // const [messages, setMessages] = useState([]);
     const [dices, setDices] = useState([1,2,3,4,5]);
     // const dices = [1,2,3,4,5];
     const [points, setPoints] = useState(pointsInit);
 
-    useEffect(() => {
-        if (payload.topic) {
-          setMessages(messages => [...messages, payload])
+    console.log("--ggggg", game);
 
-          console.log(payload);
-        }
-      }, [payload])
+    useEffect(() => {
+        getMoveList();
+    }, [])
+
+    useEffect(() => {
+        // getGame(game.gameId);
+    })
+
+    // useEffect(() => {
+    //     if (payload.topic) {
+    //       setMessages(messages => [...messages, payload])
+
+    //       console.log(payload);
+    //     }
+    //   }, [payload])
 
     const sumPoints = Object.values(points).reduce((acc, field) => {
         return acc + field.value;
@@ -65,7 +78,7 @@ const Board = ({payload}) => {
     const ifBigStrit = (dices) => {
         const sorted = [...dices];
         sorted.sort();
-        console.log("s", sorted);
+        // console.log("s", sorted);
         let ifB = true;
         for (let i = 1; i < dices.length; i++){
             if (sorted[i-1] + 1 !== sorted[i]){
@@ -79,7 +92,7 @@ const Board = ({payload}) => {
 
     const ifSmallStrit = dices => {
         let nDices = Array.from(new Set(dices));
-        console.log(nDices);
+        // console.log(nDices);
         if (nDices.length < 4)
             return false;
         else
@@ -119,15 +132,22 @@ const Board = ({payload}) => {
     }
 
     const clickField = (field, showPoints) => {
-        console.log("click")
+        // console.log("click");
         const points2 = 
             JSON.parse(JSON.stringify(points));
         points2[field].clicked = true;
         points2[field].value = showPoints;
-        console.log(points2)
+        // console.log(points2);
         setPoints(points2); 
+
+        const move = {
+            username: username,
+            field: field,
+            points: showPoints
+        }
         //push move to moves
-        //game.board = board
+        addMove(game.gameId, move)
+
     }
 
     const fields =  ['1', '2', '3', '4', '5', '6', 'x3', 'x4', 'mały strit', 'duży strit', 'generał']
@@ -178,11 +198,29 @@ const Board = ({payload}) => {
         <button className="reroll"
         onClick={rollDices}>Roll</button>
         <p>Suma: {_.sum(dices)}</p>
+        <button onClick={() => deleteMove(game.gameId)}>Cofnij ruch</button>
        </div>
        
        </div>
      );
 }
 
-export default Board;
+const mapStateToProps = (state) => {
+    // console.log(state);
+    return {
+        games: state.games,
+        users: state.users,
+        moves: state.moves,
+        // game: state.game
+    }
+}
+
+const mapDispatchToProps = {
+    getMoveList,
+    addMove,
+    getGame,
+    deleteMove
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Board);
  

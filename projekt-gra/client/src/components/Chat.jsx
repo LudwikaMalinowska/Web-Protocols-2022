@@ -18,7 +18,7 @@ const Chat = ({payload, username}) => {
       }, [payload])
 
     const content = (messages) => {
-        console.log(messages);
+        // console.log(messages);
         const m = messages.map(item => {
           if (item.message){
             if (item.type === "private-message") {

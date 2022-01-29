@@ -12,7 +12,7 @@ import UsersInGameBox from "./UsersInGameBox";
 const GameBoard = ({game, users, gameUsers, topic, client,publish, unsubscribe, payload, username, deleteGame, getGameUserList, deleteUserFromGame}, props) => {
     const [editing, setEditing] = useState(false);
             
-    console.log("gu", gameUsers)
+    console.log("---ggg", game)
 
     useEffect(() => {
         getGameUserList(topic);
@@ -25,7 +25,7 @@ const GameBoard = ({game, users, gameUsers, topic, client,publish, unsubscribe, 
     };
 
     const handleDeleteRoom = () => {
-        console.log("topic:", topic);
+        // console.log("topic:", topic);
         deleteGame(topic);
         unsubscribe(topic);
         
@@ -37,7 +37,7 @@ const GameBoard = ({game, users, gameUsers, topic, client,publish, unsubscribe, 
         <h3>{game ? game.gameName : ""}</h3>
             <div className="game-box">
             <button onClick={handleUnsub} >{"<--"}</button>
-            <Board/>
+            <Board game={game} username={username}/>
             <Chatbox topic={topic} publish={publish} payload={payload} username={username}/>
             </div>
 
@@ -57,9 +57,9 @@ const GameBoard = ({game, users, gameUsers, topic, client,publish, unsubscribe, 
 }
  
 const mapStateToProps = (state, props) => {
-    console.log("state:", state);
+    // console.log("state:", state);
     // const gameId = props.match.params.gameId;
-    console.log("props:", props);
+    // console.log("props:", props);
     return {
         games: state.games,
         // game: state.game,

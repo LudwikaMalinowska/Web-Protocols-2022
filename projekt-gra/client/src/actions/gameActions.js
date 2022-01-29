@@ -92,6 +92,23 @@ export const gameGetByIdFailAction = (error) => ({
 })
 //-----
 
+//-----
+export const gameGetAction = (users) => ({
+    type: "GAME_GET_BY_ID",
+    payload: users
+})
+
+export const gameGetStartAction = ({
+    type: "GAME_GET_BY_ID_START"
+});
+
+export const gameGetFailAction = (error) => ({
+    type: "GAME_GET_BY_ID_FAILED",
+    payload: error
+})
+//-----
+
+
 
 
 export const getGameList = () => {
@@ -144,6 +161,22 @@ export const getGamesById = (id) => {
     }
 }
 
+export const getGame = (id) => {
+    return async dispatch => {
+        dispatch(gameGetStartAction);
+        // console.log('Create user action');
+        setTimeout(async () => {
+            try{
+                const response = await axios.get(`http://localhost:5000/games/${id}`);
+                console.log("res", response);
+                dispatch(gameGetAction(response.data));        
+            }catch(ex) {
+                dispatch(gameGetFailAction(ex));
+            }
+        }, 1000)
+    }
+}
+
 export const addGame = (game) => {
     return async dispatch => {
         dispatch(addGameStartAction);
@@ -184,6 +217,23 @@ export const updateGame = (id, updatedGame) => {
         setTimeout(async () => {
             try{
                 const response = await axios.put(`http://localhost:5000/games/${id}`, updatedGame);
+                console.log(response);
+                dispatch(updateGameAction(response.data));        
+            }catch(ex) {
+                dispatch(updateGameFailAction(ex));
+            }
+        }, 1000)
+    }
+}
+
+export const updateGameBoard = (id, board) => {
+    console.log("upd");
+    return async dispatch => {
+        dispatch(updateGameStartAction);
+        console.log('Update game action');
+        setTimeout(async () => {
+            try{
+                const response = await axios.put(`http://localhost:5000/games/${id}`, board);
                 console.log(response);
                 dispatch(updateGameAction(response.data));        
             }catch(ex) {

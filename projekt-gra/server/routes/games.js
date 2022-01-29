@@ -58,7 +58,9 @@ router.get('/:gameId', async (req, res) => {
 router.post('/', async (req, res) => {
   const newGame = new Game({
     "gameId": req.body.gameId,
-    "gameName": req.body.gameName || "Bez Nazwy"
+    "gameName": req.body.gameName || "Bez Nazwy",
+    "gameUsers": [],
+    "moves": []
   });
   console.log("ngame", newGame)
   newGame.save()

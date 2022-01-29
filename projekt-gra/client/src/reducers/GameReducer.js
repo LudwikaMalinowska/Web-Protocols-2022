@@ -41,6 +41,8 @@ const gameReducer = (state = [], action) => {
             return state;
         case "GAME_UPDATE_FAILED":
             return state;
+
+        
         default:
             return state;
     }

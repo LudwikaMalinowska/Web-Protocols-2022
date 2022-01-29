@@ -22,7 +22,7 @@ const initialValues = {
 const Connect = ({connect, publish}) => {
 
     const handleSubmit = (values) => {
-        console.log(values);
+        // console.log(values);
         const { host, clientId, port, username, password } = values;
         // const url = `ws://broker.emqx.io:8083/mqtt`;
         const url = `mqtt://localhost:8000/mqtt`;

@@ -14,7 +14,7 @@ const UsersInGameBox = ({gameUsers, getGameUserList, topic, username, publish, c
 
     const sendPrivateMessage = (user) => {
         const message = prompt(`Napisz wiadomość do ${user.username}`)
-        console.log(user);
+        // console.log(user);
 
         publish(client.options.clientId, JSON.stringify({username: user.username, topic: client.options.userId, type: "private-message-sent",
         message: message}))
@@ -35,9 +35,9 @@ const UsersInGameBox = ({gameUsers, getGameUserList, topic, username, publish, c
 
 
 const mapStateToProps = (state, props) => {
-    console.log("state:", state);
+    // console.log("state:", state);
     // const gameId = props.match.params.gameId;
-    console.log("props:", props);
+    // console.log("props:", props);
     return {
         gameUsers: state.gameUsers
     }

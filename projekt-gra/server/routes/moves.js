@@ -12,10 +12,18 @@ router.get('/:gameId/moves', async (req, res) => {
     const gameId = req.params.gameId;
     const query = Game.findOne({"gameId": gameId});
     query.exec(function (err, game) {
-      if (err) throw err;
-      return res.send({
-        moves: game.moves
-      });
+      if (err) console.log(err);
+
+      if (game !== null) {
+        return res.send({
+            moves: game.moves
+          });
+      }
+      else {
+        console.log("Game not found");
+        res.status(404).json({error: "Game not found"})
+      }
+      
     })
 });
 
@@ -28,7 +36,7 @@ router.post('/:gameId/moves', async (req, res) => {
     const move = req.body;
     const query = Game.findOne({"gameId": gameId});
 
-    query.exec(function (err, game) {
+    query.exec(async function (err, game) {
         if (err) throw err;
       
         const newMoves = [...game.moves];
@@ -37,7 +45,9 @@ router.post('/:gameId/moves', async (req, res) => {
         const updatedGame = await Game.findOneAndUpdate({"gameId": gameId}, {$set: {"moves": newMoves}})
         .catch(err => console.log(err));
 
-        return res.send(updatedGame);
+        console.log(updatedGame.moves);
+
+        return res.send({moves: newMoves});
     })
 
 });
@@ -46,16 +56,20 @@ router.delete('/:gameId/moves', async (req, res) => {
     const gameId = req.params.gameId;
     const query = Game.findOne({"gameId": gameId});
 
-    query.exec(function (err, game) {
+    query.exec(async function (err, game) {
         if (err) throw err;
       
-        const newMoves = [...game.moves];
-        newMoves.pop();
-
-        const updatedGame = await Game.findOneAndUpdate({"gameId": gameId}, {$set: {"moves": newMoves}})
-        .catch(err => console.log(err));
-
-        return res.send(updatedGame);
+        if (game !== null){
+            const newMoves = [...game.moves];
+            newMoves.pop();
+    
+            const updatedGame = await Game.findOneAndUpdate({"gameId": gameId}, {$set: {"moves": newMoves}})
+            .catch(err => console.log(err));
+    
+            console.log("nm", newMoves)
+            return res.send({moves: newMoves});
+        }
+        
     })
 })
 

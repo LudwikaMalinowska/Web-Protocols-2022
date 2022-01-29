@@ -60,10 +60,10 @@ const HookMqtt = ({games, getGameList, getUserList, addUser, deleteUser}) => {
             client.end();
           });
           client.on('message', (topic, message) => {
-            console.log("msg");
+            // console.log("msg");
             let payload = JSON.parse(message.toString());
             payload.topic = topic;
-            console.log("msg:", payload);
+            // console.log("msg:", payload);
             // const payload = { topic, username, message: message.toString() };
             // console.log("payload", payload);
             setPayload(payload);
@@ -81,7 +81,7 @@ const HookMqtt = ({games, getGameList, getUserList, addUser, deleteUser}) => {
     const mqttSubscribe = (topic) => {
       
       if (client) {
-        console.log("sub");
+        // console.log("sub");
         client.subscribe(topic, (err) => {
           if (err) {
             console.log(err);
@@ -96,9 +96,9 @@ const HookMqtt = ({games, getGameList, getUserList, addUser, deleteUser}) => {
     }
 
     const mqttPublish = (topic, message) => {
-      console.log("pub");
+      // console.log("pub");
       client.publish(topic, message, (err) => {
-        console.log("---msg", message);
+        // console.log("---msg", message);
         if (err) {
           console.log("Error: ", err);
         }
@@ -134,6 +134,7 @@ const HookMqtt = ({games, getGameList, getUserList, addUser, deleteUser}) => {
             if (isSubed){
 
               const game = games.find(game => game.gameId === topicName);
+              console.log("---gg", game, topicName);
               return (<GameBoard game={game} topic={topicName} publish={mqttPublish} unsubscribe={mqttUnSub}
               payload={payload} username={username}
               client={client}
@@ -167,7 +168,7 @@ const HookMqtt = ({games, getGameList, getUserList, addUser, deleteUser}) => {
 }
  
 const mapStateToProps = (state) => {
-  console.log(state);
+  // console.log(state);
   return {
       games: state.games
   }

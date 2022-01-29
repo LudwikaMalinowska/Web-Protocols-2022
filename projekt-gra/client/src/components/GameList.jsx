@@ -29,7 +29,7 @@ const GameList = ({users, games, client, subscribe, publish, disconnect, payload
     const handleSubscribe = (topic) => {
         subscribe(topic);
         subscribe(client.options.clientId);
-        console.log("Subscribed to " + topic);
+        // console.log("Subscribed to " + topic);
         setTopic(topic);
         //adduser
 
@@ -46,10 +46,11 @@ const GameList = ({users, games, client, subscribe, publish, disconnect, payload
     const createRoom = () => {
         const roomTopic = "game" + uuidv4()
 
-        console.log("roomTopic: ", roomTopic);
+        // console.log("roomTopic: ", roomTopic);
         publish('game-list-board', JSON.stringify({username, roomTopic, type: "create-room"}))
         handleSubscribe(roomTopic);
-        addGame({gameId: roomTopic, gameName: "Bez Nazwy"});
+        addGame({gameId: roomTopic, gameName: "Bez Nazwy", gameUsers: [],
+        moves: []});
         
     }
 
@@ -151,7 +152,7 @@ const GameList = ({users, games, client, subscribe, publish, disconnect, payload
 }
  
 const mapStateToProps = (state) => {
-    console.log(state);
+    // console.log(state);
     return {
         games: state.games,
         users: state.users
