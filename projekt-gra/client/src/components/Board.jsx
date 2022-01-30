@@ -6,10 +6,12 @@ import { addMove, getMoveList, deleteMove } from "../actions/moveActions";
 import "./../board.css";
 
 const _ = require("lodash");
+const Cookies = require('js-cookie')
 
 
 const Board = ({gameId, game, username, addMove, getMoveList, getGame, deleteMove, moves, getGameBoard, board, updateGameBoard}) => {
     const [dices, setDices] = useState([1,2,3,4,5]);
+    const playerTurn = Cookies.get('playerTurn');
 
     console.log("--mm", moves);
 
@@ -112,23 +114,29 @@ const Board = ({gameId, game, username, addMove, getMoveList, getGame, deleteMov
         }
     }
 
-    const clickField = (field, showPoints, playerNr) => {
+    const clickField = (field, showPoints) => {
         const board2 = 
             JSON.parse(JSON.stringify(board));
-        board2[playerNr][field].clicked = true;
-        board2[playerNr][field].value = showPoints;
+        board2[playerTurn][field].clicked = true;
+        board2[playerTurn][field].value = showPoints;
 
         // console.log("board2", board2);
         updateGameBoard(gameId, board2);
 
         const move = {
             username: username,
-            playerNr: playerNr,
+            playerNr: playerTurn,
             field: field,
             points: showPoints
         }
         
         addMove(game.gameId, move)
+        if (playerTurn === "player1"){
+            Cookies.set('playerTurn', "player2")
+        } else {
+            Cookies.set('playerTurn', "player1")
+        }
+        
 
     }
 
@@ -139,21 +147,32 @@ const Board = ({gameId, game, username, addMove, getMoveList, getGame, deleteMov
         const p1Field = (board.player1[field].clicked) ? (
             <td className="black">{board.player1[field].value}</td>
         ) : (
-            <td className="grey"
-                    onClick={() => {
-                        clickField(field, showPoints, "player1")
-                    }}
-            >{showPoints}</td>
+            (playerTurn === "player1") ? (
+                <td className="grey"
+                onClick={() => {
+                    clickField(field, showPoints)
+                }}
+                >{showPoints}</td>
+            ) : (
+                <td> </td>
+            )
+            
         );
 
         const p2Field = (board.player2[field].clicked) ? (
+            
             <td className="black">{board.player2[field].value}</td>
         ) : (
-            <td className="grey"
+            (playerTurn === "player2") ? (
+                <td className="grey"
                     onClick={() => {
-                        clickField(field, showPoints, "player2")
+                        clickField(field, showPoints)
                     }}
             >{showPoints}</td>
+            ) : (
+                <td> </td>
+            )
+            
         );
         
         //if (board) {

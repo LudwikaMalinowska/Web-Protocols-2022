@@ -3,7 +3,7 @@
 const moveReducer = (state = [], action) => {
     switch(action.type) {
         case "MOVE_ADD":
-            return [...state, action.payload];
+            return action.payload.moves;
         case "MOVE_ADD_START": 
             return state;
         case "MOVE_ADD_FAILED":

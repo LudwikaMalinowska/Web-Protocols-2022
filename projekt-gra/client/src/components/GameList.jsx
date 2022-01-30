@@ -10,6 +10,8 @@ import { useState } from 'react';
 import SettingsForm from './SettingsForm';
 import LoggedInBoard from './LoggedInBoard';
 
+const Cookies = require('js-cookie')
+
 const GameList = ({users, games, client, subscribe, publish, disconnect, payload, username, setUsername, setTopic, addGame, getGameList, getUserList, addUserToGame, getGamesByName, getGamesById}) => {
     const inputRoomId = useRef(null);
     const [changingSettings, setChangingSettings] = useState(false);
@@ -68,15 +70,22 @@ const GameList = ({users, games, client, subscribe, publish, disconnect, payload
         board: {
             player1: pointsInit,
             player2: pointsInit
-        }
+        },
+        playerTurn: "player1"
         });
+        Cookies.set('playerTurn', "player1")
         
     }
 
     const handleJoinRoom = () => {
         const roomId = inputRoomId.current.value;
-        handleSubscribe(roomId);
-        publish(roomId, JSON.stringify({username, roomTopic: roomId, type: "join-room"}))
+        
+        const game = games.find(game => game.gameId === roomId);
+        if (game){
+            handleSubscribe(roomId);
+            publish(roomId, JSON.stringify({username, roomTopic: roomId, type: "join-room"}))
+            Cookies.set('playerTurn', game.playerTurn)
+        }
         
     }
 

@@ -38,7 +38,7 @@ const Connect = ({connect, publish}) => {
             will: {
               topic: 'WillMsg',
               payload: 'Connection Closed abnormally..!',
-              qos: 0,
+              qos: 2,
               retain: false
             },
             rejectUnauthorized: false
