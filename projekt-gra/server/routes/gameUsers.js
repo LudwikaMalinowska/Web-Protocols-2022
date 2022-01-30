@@ -16,7 +16,7 @@ router.get('/:gameId/users', async (req, res) => {
     
     console.log(game);
 
-    if (game !== undefined) {
+    if (game !== null) {
       console.log(game.users);
       res.send({users: game.users})
     } else {

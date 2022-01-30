@@ -56,11 +56,13 @@ router.get('/:gameId', async (req, res) => {
 
 
 router.post('/', async (req, res) => {
+  console.log(req.body.board);
   const newGame = new Game({
     "gameId": req.body.gameId,
     "gameName": req.body.gameName || "Bez Nazwy",
     "gameUsers": [],
-    "moves": []
+    "moves": [],
+    "board": req.body.board
   });
   console.log("ngame", newGame)
   newGame.save()
@@ -104,6 +106,54 @@ router.put("/:gameId", async (req, res) => {
         ...updatedGame,
         "gameId": gameId
       });
+    }
+    else {
+      console.log("Game not found");
+      res.status(404).json({error: "Game not found"})
+    }
+  })
+})
+
+
+router.get('/:gameId/board', async (req, res) => {
+  const gameId = req.params.gameId;
+  const query = Game.findOne({"gameId": gameId});
+  query.exec(function (err, game) {
+    if (err) console.log(err);
+
+    if (game !== null) {
+      return res.send({
+          board: game.board
+        });
+    }
+    else {
+      console.log("Game not found");
+      res.status(404).json({error: "Game not found"})
+    }
+    
+  })
+});
+
+router.put("/:gameId/board", async (req, res) => {
+  console.log("---put")
+  const gameId = req.params.gameId;
+  const board = req.body;
+
+  const game = await Game.findOne({"gameId": gameId})
+  .catch(err => console.log(err));
+  const updatedGame = {
+    ...game,
+    board: board
+  }
+  console.log(updatedGame.board)
+  
+  const query = Game.findOneAndUpdate({"gameId": gameId}, {
+    $set: {"board": board}
+  });
+  query.exec(function (err, game) {
+    if (err) console.log(err);
+    if (game !== null) {
+      return res.send({board: board});
     }
     else {
       console.log("Game not found");

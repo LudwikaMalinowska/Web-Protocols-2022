@@ -43,6 +43,20 @@ const GameList = ({users, games, client, subscribe, publish, disconnect, payload
         
     }
 
+    const pointsInit = {
+        '1': {value: 0, clicked: false},
+        '2': {value: 0, clicked: false},
+        '3': {value: 0, clicked: false},
+        '4': {value: 0, clicked: false},
+        '5': {value: 0, clicked: false},
+        '6': {value: 0, clicked: false},
+        'x3': {value: 0, clicked: false},
+        'x4': {value: 0, clicked: false},
+        'mały strit': {value: 0, clicked: false},
+        'duży strit': {value: 0, clicked: false}, 
+        'generał': {value: 0, clicked: false}
+    };
+
     const createRoom = () => {
         const roomTopic = "game" + uuidv4()
 
@@ -50,7 +64,12 @@ const GameList = ({users, games, client, subscribe, publish, disconnect, payload
         publish('game-list-board', JSON.stringify({username, roomTopic, type: "create-room"}))
         handleSubscribe(roomTopic);
         addGame({gameId: roomTopic, gameName: "Bez Nazwy", gameUsers: [],
-        moves: []});
+        moves: [],
+        board: {
+            player1: pointsInit,
+            player2: pointsInit
+        }
+        });
         
     }
 

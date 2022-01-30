@@ -111,6 +111,7 @@ export const gameGetFailAction = (error) => ({
 
 
 
+
 export const getGameList = () => {
     return async dispatch => {
         dispatch(gamesListRequestStartAction);
@@ -173,7 +174,7 @@ export const getGame = (id) => {
             }catch(ex) {
                 dispatch(gameGetFailAction(ex));
             }
-        }, 1000)
+        }, 0)
     }
 }
 
@@ -226,19 +227,3 @@ export const updateGame = (id, updatedGame) => {
     }
 }
 
-export const updateGameBoard = (id, board) => {
-    console.log("upd");
-    return async dispatch => {
-        dispatch(updateGameStartAction);
-        console.log('Update game action');
-        setTimeout(async () => {
-            try{
-                const response = await axios.put(`http://localhost:5000/games/${id}`, board);
-                console.log(response);
-                dispatch(updateGameAction(response.data));        
-            }catch(ex) {
-                dispatch(updateGameFailAction(ex));
-            }
-        }, 1000)
-    }
-}
