@@ -62,7 +62,8 @@ router.post('/', async (req, res) => {
     "gameName": req.body.gameName || "Bez Nazwy",
     "gameUsers": [],
     "moves": [],
-    "board": req.body.board
+    "board": req.body.board,
+    "playerTurn": "player1"
   });
   console.log("ngame", newGame)
   newGame.save()
@@ -93,19 +94,16 @@ router.delete('/:gameId', async (req, res) => {
 router.put("/:gameId", async (req, res) => {
   console.log("---put")
   const gameId = req.params.gameId;
-  const updatedGame = {
-    "gameName": req.body.gameName
-  }
-  const query = Game.findOneAndUpdate({"gameId": gameId}, {
-    $set: updatedGame
-  });
+  // const updatedGame = {
+  //   "gameName": req.body.gameName
+  // }
+
+  const query = Game.findOneAndUpdate({"gameId": gameId}, {$set: req.body});
+
   query.exec(function (err, game) {
     if (err) console.log(err);
     if (game !== null) {
-      return res.send({
-        ...updatedGame,
-        "gameId": gameId
-      });
+      return res.send(game);
     }
     else {
       console.log("Game not found");

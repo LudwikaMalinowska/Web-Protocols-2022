@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { getGameBoard, updateGameBoard } from "../actions/boardActions";
-import { getGame} from "../actions/gameActions";
+import { getGame, updateGame} from "../actions/gameActions";
 import { addMove, getMoveList, deleteMove } from "../actions/moveActions";
 import "./../board.css";
 
@@ -9,7 +9,7 @@ const _ = require("lodash");
 const Cookies = require('js-cookie')
 
 
-const Board = ({gameId, game, username, addMove, getMoveList, getGame, deleteMove, moves, getGameBoard, board, updateGameBoard}) => {
+const Board = ({gameId, game, username, addMove, getMoveList, getGame, deleteMove, moves, getGameBoard, board, updateGameBoard, updateGame}) => {
     const [dices, setDices] = useState([1,2,3,4,5]);
     const playerTurn = Cookies.get('playerTurn');
 
@@ -22,17 +22,18 @@ const Board = ({gameId, game, username, addMove, getMoveList, getGame, deleteMov
 
 
 
-    let sumPointsPlayer1;
-    let sumPointsPlayer2;
-    if (board.player1) {
-        sumPointsPlayer1 = Object.values(board.player1).reduce((acc, field) => {
-            return acc + field.value;
-        }, 0)
-        sumPointsPlayer2 = Object.values(board.player2).reduce((acc, field) => {
-            return acc + field.value;
-        }, 0)
+    const sumPointsPlayer1 = (board) => Object.values(board.player1).reduce((acc, field) => {
+        return acc + field.value;
+    }, 0)
+    const sumPointsPlayer2 = (board) => Object.values(board.player2).reduce((acc, field) => {
+        return acc + field.value;
+    }, 0)
+    const isNoEmptyField = (board) => {
+        const player1Fields = _.every(board.player1, ['clicked', true]);
+        const player2Fields = _.every(board.player2, ['clicked', true]);
+
+        return player1Fields && player2Fields;
     }
-    
 
     const rollDiceNr = () => Math.floor(Math.random() * 6 + 1);
 
@@ -130,14 +131,40 @@ const Board = ({gameId, game, username, addMove, getMoveList, getGame, deleteMov
             points: showPoints
         }
         
+        const nextTurn = (playerTurn === "player1") ? "player2" : "player1";
         addMove(game.gameId, move)
-        if (playerTurn === "player1"){
-            Cookies.set('playerTurn', "player2")
-        } else {
-            Cookies.set('playerTurn', "player1")
-        }
+        Cookies.set('playerTurn', nextTurn)
+        // const nGame = {
+        //     ...game,
+        //     playerTurn: nextTurn
+        // }
+        updateGame(gameId, {playerTurn: nextTurn});
         
+        if (isNoEmptyField(board2)) {
+            announceWinner(board2);
+        }
 
+    }
+
+    const announceWinner = (board) => {
+        const pointsPlayer1 = sumPointsPlayer1(board);
+        const pointsPlayer2 = sumPointsPlayer2(board);
+        let winner;
+        let winnerText;
+        if (pointsPlayer1 > pointsPlayer2) {
+            winner = "player1";
+            winnerText = "Wygrał gracz 1!"
+        }
+        else if (pointsPlayer1 < pointsPlayer2) {
+            winner = "player2";
+            winnerText = "Wygrał gracz 2!"
+        }
+        else {
+            winner = null;
+            winnerText = "Remis!"
+        }
+
+        alert(winnerText);
     }
 
     const fields =  ['1', '2', '3', '4', '5', '6', 'x3', 'x4', 'mały strit', 'duży strit', 'generał']
@@ -194,8 +221,8 @@ const Board = ({gameId, game, username, addMove, getMoveList, getGame, deleteMov
         {board.player1 && tableContent(board)}
         <tr>
             <td>suma =</td>
-            <td>{sumPointsPlayer1}</td>
-            <td>{sumPointsPlayer2}</td>
+            <td>{sumPointsPlayer1(board)}</td>
+            <td>{sumPointsPlayer2(board)}</td>
         </tr>
        </table>
        <div className="rolling">
@@ -232,7 +259,8 @@ const mapDispatchToProps = {
     getGame,
     deleteMove,
     getGameBoard,
-    updateGameBoard
+    updateGameBoard,
+    updateGame
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Board);
