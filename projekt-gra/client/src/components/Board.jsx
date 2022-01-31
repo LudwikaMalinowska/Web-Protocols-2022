@@ -9,13 +9,15 @@ const _ = require("lodash");
 const Cookies = require('js-cookie')
 
 
-const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, deleteMove, moves, getGameBoard, board, updateGameBoard, updateGame}) => {
+const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, deleteMove, moves, getGameBoard, board, updateGameBoard, updateGame, intervals, setIntervals}) => {
     const [dices, setDices] = useState([0,0,0,0,0]);
     let playerTurn = Cookies.get('playerTurn');
     const [isPlayer, setIsPlayer] = useState(false);
     const [player, setPlayer] = useState('');
+
     // console.log("--mm", moves);
     // console.log("game", game);
+    // console.log("-board", board);
 
     useEffect(async () => {
         rollDices();
@@ -23,9 +25,12 @@ const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, d
         await getMoveList(gameId);
         await getGameBoard(gameId);
 
-        setInterval(() => {
+        const interval1 = setInterval(() => {
             getGameBoard(gameId);
         }, 500);
+       
+
+        setIntervals([...intervals, interval1]);
     }, [])
 
 

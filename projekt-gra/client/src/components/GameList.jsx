@@ -20,12 +20,15 @@ const GameList = ({users, games, client, subscribe, publish, disconnect, payload
     const idButton = useRef(null);
     // const [displayedGames, setDisplayedGames] = useState(games);
     const [filterType, setFilterType] = useState('name');
+    const [intervals, setIntervals] = useState([]);
 
     useEffect(() => {
-        setInterval(() => {
+        
+        const interval = setInterval(() => {
             getGameList();
             getUserList();
-        }, 300000);
+        }, 1000);
+        setIntervals([...intervals, interval]);
     }, [])
 
     const handleSubscribe = (topic) => {
@@ -42,7 +45,10 @@ const GameList = ({users, games, client, subscribe, publish, disconnect, payload
         }
         addUserToGame(topic, user);
         publish(topic, JSON.stringify({username, roomTopic: topic, type: "join-room"}))
-        
+
+        intervals.forEach(i => {
+            clearInterval(i);
+        })
     }
 
     const pointsInit = {
@@ -86,7 +92,7 @@ const GameList = ({users, games, client, subscribe, publish, disconnect, payload
         const game = games.find(game => game.gameId === roomId);
         if (game){
             handleSubscribe(roomId);
-            publish(roomId, JSON.stringify({username, roomTopic: roomId, type: "join-room"}))
+            // publish(roomId, JSON.stringify({username, roomTopic: roomId, type: "join-room"}))
             Cookies.set('playerTurn', game.playerTurn)
         }
         
@@ -109,6 +115,10 @@ const GameList = ({users, games, client, subscribe, publish, disconnect, payload
     }
 
     const filter = (value) => {
+        intervals.forEach(i => {
+            clearInterval(i);
+        })
+
         if (filterType === "name")
             getGamesByName(value);
         else if (filterType === "id")
@@ -116,7 +126,11 @@ const GameList = ({users, games, client, subscribe, publish, disconnect, payload
     }
 
     const clearFilters = () => {
-        getGameList();
+        const interval = setInterval(() => {
+            getGameList();
+            getUserList();
+        }, 1000);
+        setIntervals([...intervals, interval]);
     }
 
     const nameButtonClick = () => {

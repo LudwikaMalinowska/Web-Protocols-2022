@@ -2,9 +2,9 @@ import axios from "axios";
 
 
 
-export const gamesListRequestAction = (users) => ({
+export const gamesListRequestAction = (games) => ({
     type: "GAME_LIST_REQUEST",
-    payload: users
+    payload: games
 })
 
 export const gamesListRequestStartAction = ({
@@ -62,9 +62,9 @@ export const updateGameFailAction = (error) => ({
 })
 
 //-------
-export const gameGetByNameAction = (users) => ({
+export const gameGetByNameAction = (games) => ({
     type: "GAME_GET_BY_NAME",
-    payload: users
+    payload: games
 })
 
 export const gameGetByNameStartAction = ({
@@ -77,9 +77,9 @@ export const gameGetByNameFailAction = (error) => ({
 })
 
 //-----
-export const gameGetByIdAction = (users) => ({
+export const gameGetByIdAction = (games) => ({
     type: "GAME_GET_BY_ID",
-    payload: users
+    payload: games
 })
 
 export const gameGetByIdStartAction = ({
@@ -93,9 +93,9 @@ export const gameGetByIdFailAction = (error) => ({
 //-----
 
 //-----
-export const gameGetAction = (users) => ({
+export const gameGetAction = (games) => ({
     type: "GAME_GET",
-    payload: users
+    payload: games
 })
 
 export const gameGetStartAction = ({
@@ -115,11 +115,10 @@ export const gameGetFailAction = (error) => ({
 export const getGameList = () => {
     return async dispatch => {
         dispatch(gamesListRequestStartAction);
-        console.log('Create user action');
         setTimeout(async () => {
             try{
                 const response = await axios.get('http://localhost:5000/games');
-                console.log("res", response);
+                // console.log("res", response);
                 dispatch(gamesListRequestAction(response.data));        
             }catch(ex) {
                 dispatch(gamesListRequestFailAction(ex));
@@ -130,7 +129,7 @@ export const getGameList = () => {
 
 export const getGamesByName = (name) => {
     console.log('-action');
-    console.log(name);
+    console.log("n:", name);
     return async dispatch => {
         dispatch(gameGetByNameStartAction);
         console.log('----action');
@@ -149,7 +148,6 @@ export const getGamesByName = (name) => {
 export const getGamesById = (id) => {
     return async dispatch => {
         dispatch(gameGetByIdStartAction);
-        // console.log('Create user action');
         setTimeout(async () => {
             try{
                 const response = await axios.get(`http://localhost:5000/games/searchId?id=${id}`);
@@ -165,7 +163,6 @@ export const getGamesById = (id) => {
 export const getGame = (id) => {
     return async dispatch => {
         dispatch(gameGetStartAction);
-        // console.log('Create user action');
         setTimeout(async () => {
             try{
                 const response = await axios.get(`http://localhost:5000/games/${id}`);

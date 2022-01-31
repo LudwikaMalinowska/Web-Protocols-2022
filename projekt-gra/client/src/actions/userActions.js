@@ -67,11 +67,9 @@ export const updateUserFailAction = (error) => ({
 export const getUserList = () => {
     return async dispatch => {
         dispatch(usersListRequestStartAction);
-        console.log('Create user action');
         setTimeout(async () => {
             try{
                 const response = await axios.get('http://localhost:5000/users');
-                console.log("res", response);
                 dispatch(usersListRequestAction(response.data));        
             }catch(ex) {
                 dispatch(usersListRequestFailAction(ex));
@@ -83,7 +81,7 @@ export const getUserList = () => {
 export const addUser = (user) => {
     return async dispatch => {
         dispatch(addUserStartAction);
-        console.log('Create user action');
+        // console.log('Create user action');
         setTimeout(async () => {
             try{
                 const response = await axios.post('http://localhost:5000/users', user);

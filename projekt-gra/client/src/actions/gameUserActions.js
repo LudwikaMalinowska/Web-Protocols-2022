@@ -52,14 +52,11 @@ export const deleteGameUserFailAction = (error) => ({
 
 
 export const getGameUserList = (gameId) => {
-    console.log("gid", gameId);
     return async dispatch => {
         dispatch(gameUsersListRequestStartAction);
-        console.log('--Create game User action');
         setTimeout(async () => {
             try{
                 const response = await axios.get(`http://localhost:5000/games/${gameId}/users`);
-                console.log("response", response);
                 dispatch(gameUsersListRequestAction(response.data));        
             }catch(ex) {
                 // console.log("er");

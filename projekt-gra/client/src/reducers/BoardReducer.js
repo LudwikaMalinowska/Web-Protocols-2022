@@ -31,8 +31,8 @@ const boardReducer = (state = [], action) => {
             return action.payload.board;
 
         case "BOARD_UPDATE":
-            console.log("payload", action.payload);
-            console.log("a", action.payload.board);
+            // console.log("payload", action.payload);
+            // console.log("a", action.payload.board);
             return action.payload.board;
         case "BOARD_UPDATE_START":
             return state;

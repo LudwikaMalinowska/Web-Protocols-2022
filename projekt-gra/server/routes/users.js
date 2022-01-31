@@ -40,15 +40,21 @@ router.post('/', async (req, res) => {
     "username": req.body.username,
     "password": req.body.password
   });
-  //console.log("ngame", newGame)
-  newUser.save()
-  .then(result => {
-    // console.log("added user: ", result);
-    return res.send(result);
-  })
-  .catch(err => {
-    res.status(500).json(err);
-  })
+  const u = await User.findOne({"userId": req.body.userId})
+    .catch(err => console.log(err));
+  // console.log(u);
+  if (u === null) {
+    //console.log("ngame", newGame)
+    newUser.save()
+    .then(result => {
+      // console.log("added user: ", result);
+      return res.send(result);
+    })
+    .catch(err => {
+      res.status(500).json(err);
+    })
+  }
+  
 });
 
 router.delete('/:userId', async (req, res) => {

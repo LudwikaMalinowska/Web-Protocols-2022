@@ -1,9 +1,9 @@
 import axios from "axios";
 
 
-export const gameBoardGetAction = (users) => ({
+export const gameBoardGetAction = (board) => ({
     type: "BOARD_REQUEST",
-    payload: users
+    payload: board
 })
 
 export const gameBoardGetStartAction = ({
@@ -15,9 +15,9 @@ export const gameBoardGetFailAction = (error) => ({
     payload: error
 })
 //-----
-export const gameBoardUpdateAction = (users) => ({
+export const gameBoardUpdateAction = (board) => ({
     type: "BOARD_UPDATE",
-    payload: users
+    payload: board
 })
 
 export const gameBoardUpdateStartAction = ({
@@ -34,7 +34,6 @@ export const gameBoardUpdateFailAction = (error) => ({
 export const getGameBoard = (gameId) => {
     return async dispatch => {
         dispatch(gameBoardGetStartAction);
-        // console.log('Create move action');
         setTimeout(async () => {
             try{
                 const response = await axios.get(`http://localhost:5000/games/${gameId}/board`);
