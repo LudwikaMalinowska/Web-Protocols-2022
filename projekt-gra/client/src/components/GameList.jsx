@@ -72,7 +72,9 @@ const GameList = ({users, games, client, subscribe, publish, disconnect, payload
             player1: pointsInit,
             player2: pointsInit
         },
-        playerTurn: "player1"
+        playerTurn: "player1",
+        player1_id: '',
+        player2_id: ''
         });
         Cookies.set('playerTurn', "player1")
         

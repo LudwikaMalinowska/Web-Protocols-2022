@@ -94,16 +94,16 @@ export const gameGetByIdFailAction = (error) => ({
 
 //-----
 export const gameGetAction = (users) => ({
-    type: "GAME_GET_BY_ID",
+    type: "GAME_GET",
     payload: users
 })
 
 export const gameGetStartAction = ({
-    type: "GAME_GET_BY_ID_START"
+    type: "GAME_GET_START"
 });
 
 export const gameGetFailAction = (error) => ({
-    type: "GAME_GET_BY_ID_FAILED",
+    type: "GAME_GET_FAILED",
     payload: error
 })
 //-----
@@ -212,6 +212,7 @@ export const deleteGame = (id) => {
 
 export const updateGame = (id, updatedGame) => {
     console.log("upd");
+    console.log(updatedGame);
     return async dispatch => {
         dispatch(updateGameStartAction);
         console.log('Update game action');

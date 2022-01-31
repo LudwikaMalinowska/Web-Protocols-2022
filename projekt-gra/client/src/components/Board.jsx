@@ -9,16 +9,23 @@ const _ = require("lodash");
 const Cookies = require('js-cookie')
 
 
-const Board = ({gameId, game, username, addMove, getMoveList, getGame, deleteMove, moves, getGameBoard, board, updateGameBoard, updateGame}) => {
+const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, deleteMove, moves, getGameBoard, board, updateGameBoard, updateGame}) => {
     const [dices, setDices] = useState([0,0,0,0,0]);
-    const playerTurn = Cookies.get('playerTurn');
-
-    console.log("--mm", moves);
+    let playerTurn = Cookies.get('playerTurn');
+    const [isPlayer, setIsPlayer] = useState(false);
+    const [player, setPlayer] = useState('');
+    // console.log("--mm", moves);
+    // console.log("game", game);
 
     useEffect(async () => {
         rollDices();
+        await getGame(gameId);
         await getMoveList(gameId);
         await getGameBoard(gameId);
+
+        setInterval(() => {
+            getGameBoard(gameId);
+        }, 500);
     }, [])
 
 
@@ -152,31 +159,36 @@ const Board = ({gameId, game, username, addMove, getMoveList, getGame, deleteMov
     }
 
     const clickField = (field, showPoints) => {
+        console.log(player, playerTurn);
+        playerTurn = Cookies.get('playerTurn');
         const board2 = 
             JSON.parse(JSON.stringify(board));
-        board2[playerTurn][field].clicked = true;
-        board2[playerTurn][field].value = showPoints;
+        if (playerTurn === player) {
+            board2[playerTurn][field].clicked = true;
+            board2[playerTurn][field].value = showPoints;
 
-        // console.log("board2", board2);
-        updateGameBoard(gameId, board2);
+            // console.log("board2", board2);
+            updateGameBoard(gameId, board2);
 
-        const move = {
-            username: username,
-            playerNr: playerTurn,
-            field: field,
-            points: showPoints
+            const move = {
+                username: username,
+                playerNr: playerTurn,
+                field: field,
+                points: showPoints
+            }
+            
+            const nextTurn = (playerTurn === "player1") ? "player2" : "player1";
+            addMove(game.gameId, move)
+            Cookies.set('playerTurn', nextTurn)
+            
+            updateGame(gameId, {playerTurn: nextTurn});
+            rollDices();
+
+            if (isNoEmptyField(board2)) {
+                announceWinner(board2);
+            }
         }
         
-        const nextTurn = (playerTurn === "player1") ? "player2" : "player1";
-        addMove(game.gameId, move)
-        Cookies.set('playerTurn', nextTurn)
-        
-        updateGame(gameId, {playerTurn: nextTurn});
-        rollDices();
-
-        if (isNoEmptyField(board2)) {
-            announceWinner(board2);
-        }
 
     }
 
@@ -201,19 +213,39 @@ const Board = ({gameId, game, username, addMove, getMoveList, getGame, deleteMov
         alert(winnerText);
     }
 
+    const addAsPlayer = () => {
+        if (game.player1_id === ''){
+            setIsPlayer(true);
+            setPlayer('player1');
+            updateGame(gameId, {player1_id: client.options.clientId})
+        } else if (game.player2_id === '') {
+            setIsPlayer(true);
+            setPlayer('player2');
+            updateGame(gameId, {player2_id: client.options.clientId})
+        } else {
+            alert("Ta gra ma już 2 graczy!")
+        }
+    }
+
     const fields =  ['1', '2', '3', '4', '5', '6', 'x3', 'x4', 'mały strit', 'duży strit', 'generał', 'szansa'];
     const tableContent = (board) => fields.map(field => {
         const showPoints = countPoints(field, dices);
+
+        const greyClick = (<td className="grey"
+        onClick={() => {
+            clickField(field, showPoints)
+        }}
+        >{showPoints}</td>);
+        const greyNoClick = (
+            <td className="grey"
+                >{showPoints}</td>
+        )
 
         const p1Field = (board.player1[field].clicked) ? (
             <td className="black">{board.player1[field].value}</td>
         ) : (
             (playerTurn === "player1") ? (
-                <td className="grey"
-                onClick={() => {
-                    clickField(field, showPoints)
-                }}
-                >{showPoints}</td>
+                (isPlayer) ? greyClick : greyNoClick
             ) : (
                 <td> </td>
             )
@@ -225,11 +257,7 @@ const Board = ({gameId, game, username, addMove, getMoveList, getGame, deleteMov
             <td className="black">{board.player2[field].value}</td>
         ) : (
             (playerTurn === "player2") ? (
-                <td className="grey"
-                    onClick={() => {
-                        clickField(field, showPoints)
-                    }}
-            >{showPoints}</td>
+                (isPlayer) ? greyClick : greyNoClick
             ) : (
                 <td> </td>
             )
@@ -265,10 +293,13 @@ const Board = ({gameId, game, username, addMove, getMoveList, getGame, deleteMov
        </div>
         
 
-        <button className="reroll"
-        onClick={rollDices}>Roll</button>
+        {isPlayer && <button className="reroll"
+        onClick={rollDices}>Roll</button>}
         <p>Suma: {_.sum(dices)}</p>
-        <button onClick={() => deleteMove(gameId)}>Cofnij ruch</button>
+        {isPlayer && <button onClick={() => deleteMove(gameId)}>Cofnij ruch</button>}
+        {!isPlayer && <button
+            onClick={addAsPlayer}
+        >Dołącz do gry</button>}
        </div>
        
        </div>
@@ -276,13 +307,13 @@ const Board = ({gameId, game, username, addMove, getMoveList, getGame, deleteMov
 }
 
 const mapStateToProps = (state) => {
-    console.log("state", state);
+    // console.log("state", state);
     
     return {
         games: state.games,
         users: state.users,
         moves: state.moves,
-        // game: state.game,
+        game: state.game,
         board: state.board
     }
 }

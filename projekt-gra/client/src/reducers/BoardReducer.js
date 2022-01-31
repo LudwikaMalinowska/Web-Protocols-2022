@@ -20,7 +20,7 @@ const boardInit = {
 }
 
 const boardReducer = (state = [], action) => {
-    console.log(action.type);
+    // console.log(action.type);
     switch(action.type) {
         
         case "BOARD_REQUEST_START": 

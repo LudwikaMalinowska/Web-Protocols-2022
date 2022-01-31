@@ -37,7 +37,9 @@ const GameBoard = ({game, users, gameUsers, topic, client,publish, unsubscribe, 
         <h3>{game ? game.gameName : ""}</h3>
             <div className="game-box">
             <button onClick={handleUnsub} >{"<--"}</button>
-            <Board game={game} username={username} gameId={topic}/>
+            <Board username={username} gameId={topic}
+                client={client}
+            />
             <Chatbox topic={topic} publish={publish} payload={payload} username={username}/>
             </div>
 

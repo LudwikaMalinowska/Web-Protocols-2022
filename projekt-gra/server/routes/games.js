@@ -46,9 +46,9 @@ router.get('/:gameId', async (req, res) => {
   query.exec(function (err, game) {
     if (err) console.log(err);
     if (game !== null)
-      return res.send(game);
+      return res.send({game: game});
     else {
-      console.log("Game not found");
+      // console.log("Game not found");
       res.status(404).json({error: "Game not found"})
     }
   })
@@ -56,19 +56,21 @@ router.get('/:gameId', async (req, res) => {
 
 
 router.post('/', async (req, res) => {
-  console.log(req.body.board);
+  // console.log(req.body.board);
   const newGame = new Game({
     "gameId": req.body.gameId,
     "gameName": req.body.gameName || "Bez Nazwy",
     "gameUsers": [],
     "moves": [],
     "board": req.body.board,
-    "playerTurn": "player1"
+    "playerTurn": "player1",
+    "player1_id": "",
+    "player2_id": ""
   });
-  console.log("ngame", newGame)
+  // console.log("ngame", newGame)
   newGame.save()
   .then(result => {
-    console.log("added game: ", result);
+    // console.log("added game: ", result);
     return res.send(result);
   })
   .catch(err => {
@@ -82,10 +84,10 @@ router.delete('/:gameId', async (req, res) => {
   query.exec(function (err, game) {
     if (err) console.log(err);
     if (game !== null){
-      console.log(`Pokój o id: ${gameId} usunięty.`)
+      // console.log(`Pokój o id: ${gameId} usunięty.`)
       return res.send(game);
     } else {
-      console.log("Game not found");
+      // console.log("Game not found");
       res.status(404).json({error: "Game not found"})
     }
   })
@@ -93,6 +95,7 @@ router.delete('/:gameId', async (req, res) => {
 
 router.put("/:gameId", async (req, res) => {
   console.log("---put")
+  console.log(req.body);
   const gameId = req.params.gameId;
   // const updatedGame = {
   //   "gameName": req.body.gameName
@@ -106,7 +109,7 @@ router.put("/:gameId", async (req, res) => {
       return res.send(game);
     }
     else {
-      console.log("Game not found");
+      // console.log("Game not found");
       res.status(404).json({error: "Game not found"})
     }
   })
@@ -125,7 +128,7 @@ router.get('/:gameId/board', async (req, res) => {
         });
     }
     else {
-      console.log("Game not found");
+      // console.log("Game not found");
       res.status(404).json({error: "Game not found"})
     }
     
@@ -133,7 +136,7 @@ router.get('/:gameId/board', async (req, res) => {
 });
 
 router.put("/:gameId/board", async (req, res) => {
-  console.log("---put")
+  // console.log("---put")
   const gameId = req.params.gameId;
   const board = req.body;
 
@@ -143,7 +146,7 @@ router.put("/:gameId/board", async (req, res) => {
     ...game,
     board: board
   }
-  console.log(updatedGame.board)
+  // console.log(updatedGame.board)
   
   const query = Game.findOneAndUpdate({"gameId": gameId}, {
     $set: {"board": board}
@@ -154,7 +157,7 @@ router.put("/:gameId/board", async (req, res) => {
       return res.send({board: board});
     }
     else {
-      console.log("Game not found");
+      // console.log("Game not found");
       res.status(404).json({error: "Game not found"})
     }
   })

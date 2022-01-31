@@ -20,7 +20,7 @@ router.get('/:gameId/moves', async (req, res) => {
           });
       }
       else {
-        console.log("Game not found");
+        // console.log("Game not found");
         res.status(404).json({error: "Game not found"})
       }
       
@@ -45,7 +45,7 @@ router.post('/:gameId/moves', async (req, res) => {
         const updatedGame = await Game.findOneAndUpdate({"gameId": gameId}, {$set: {"moves": newMoves}})
         .catch(err => console.log(err));
 
-        console.log(updatedGame.moves);
+        // console.log(updatedGame.moves);
 
         return res.send({moves: newMoves});
     })
@@ -66,7 +66,7 @@ router.delete('/:gameId/moves', async (req, res) => {
             const updatedGame = await Game.findOneAndUpdate({"gameId": gameId}, {$set: {"moves": newMoves}})
             .catch(err => console.log(err));
     
-            console.log("nm", newMoves)
+            // console.log("nm", newMoves)
             return res.send({moves: newMoves});
         }
         

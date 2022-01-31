@@ -19,6 +19,7 @@ const gameReducer = (state = [], action) => {
         case "GAME_LIST_REQUEST":
             return action.payload.allGames;
 
+
         case "GAME_GET_BY_NAME":
             console.log(action.payload);
             return action.payload.games;

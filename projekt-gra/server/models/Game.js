@@ -7,7 +7,9 @@ const gameSchema = new Schema({
     users: Array,
     moves: Array,
     board: Object,
-    playerTurn: String
+    playerTurn: String,
+    player1_id: String,
+    player2_id: String
 });
 
 module.exports = model('Game', gameSchema);

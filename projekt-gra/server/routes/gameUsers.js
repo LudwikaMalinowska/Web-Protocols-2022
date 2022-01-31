@@ -9,15 +9,15 @@ const User = require("../models/User");
 // /games/:gameId/users
 router.get('/:gameId/users', async (req, res) => {
     const gameId = req.params.gameId;
-    console.log("gid", gameId);
+    // console.log("gid", gameId);
 
     const game = await Game.findOne({"gameId": gameId})
     .catch(err => console.log(err));
     
-    console.log(game);
+    // console.log(game);
 
     if (game !== null) {
-      console.log(game.users);
+      // console.log(game.users);
       res.send({users: game.users})
     } else {
       res.send({error: "Game doesn't exist"});
@@ -28,9 +28,9 @@ router.get('/:gameId/users', async (req, res) => {
 // /games/:gameId/users
 router.post('/:gameId/users', async (req, res) => {
     const gameId = req.params.gameId;
-    console.log(gameId);
+    // console.log(gameId);
     const userId = req.body.userId;
-    console.log(userId);
+    // console.log(userId);
 
 
 
@@ -47,7 +47,7 @@ router.post('/:gameId/users', async (req, res) => {
       return res.send(gameUser);
     }
     else {
-      console.log("User not found");
+      // console.log("User not found");
       res.status(404).json({error: "User not found"})
     }
     
@@ -58,17 +58,17 @@ router.post('/:gameId/users', async (req, res) => {
 router.delete('/:gameId/users/:userId', async (req, res) => {
   const gameId = req.params.gameId;
   const userId = req.params.userId;
-  console.log(gameId);
+  // console.log(gameId);
 
   const game = await Game.findOne({"gameId": gameId});
   const newUsers = game.users.filter(user => user.userId !== userId);
-  console.log(newUsers);
+  // console.log(newUsers);
   const updatedGame = await Game.findOneAndUpdate({"gameId": gameId}, {$set: {users: newUsers}}
   // {runValidators: true, overwrite: false, new: true}
   )
   .catch(err => console.log(err));
 
-  console.log("removed user from game: ", userId);
+  // console.log("removed user from game: ", userId);
   return res.send(userId);
 });
 

@@ -133,9 +133,9 @@ const HookMqtt = ({games, getGameList, getUserList, addUser, deleteUser}) => {
         if (connectStatus === "Connected"){
             if (isSubed){
 
-              const game = games.find(game => game.gameId === topicName);
+              // const game = games.find(game => game.gameId === topicName);
               // console.log("---gg", game, topicName);
-              return (<GameBoard game={game} topic={topicName} publish={mqttPublish} unsubscribe={mqttUnSub}
+              return (<GameBoard  topic={topicName} publish={mqttPublish} unsubscribe={mqttUnSub}
               payload={payload} username={username}
               client={client}
               />)

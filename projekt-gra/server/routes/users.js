@@ -27,7 +27,7 @@ router.get('/:userId', async (req, res) => {
     if (user !== null)
       return res.send(user);
     else {
-      console.log("User not found");
+      // console.log("User not found");
       res.status(404).json({error: "User not found"})
     }
   })
@@ -43,7 +43,7 @@ router.post('/', async (req, res) => {
   //console.log("ngame", newGame)
   newUser.save()
   .then(result => {
-    console.log("added user: ", result);
+    // console.log("added user: ", result);
     return res.send(result);
   })
   .catch(err => {
@@ -52,24 +52,24 @@ router.post('/', async (req, res) => {
 });
 
 router.delete('/:userId', async (req, res) => {
-  console.log("delete")
+  // console.log("delete")
   const userId = req.params.userId;
-  console.log(userId)
+  // console.log(userId)
   const query = User.deleteOne({"userId": userId});
   query.exec(function (err, user) {
     if (err) console.log(err);
     if (user !== null){
-      console.log(`User o id: ${userId} usunięty.`)
+      // console.log(`User o id: ${userId} usunięty.`)
       return res.send(user);
     } else {
-      console.log("User not found");
+      // console.log("User not found");
       res.status(404).json({error: "User not found"})
     }
   })
 })
 
 router.put("/:userId", async (req, res) => {
-  console.log("---put")
+  // console.log("---put")
   const userId = req.params.userId;
   const updatedUser = {
     "username": req.body.username
@@ -86,7 +86,7 @@ router.put("/:userId", async (req, res) => {
       });
     }
     else {
-      console.log("User not found");
+      // console.log("User not found");
       res.status(404).json({error: "User not found"})
     }
   })
