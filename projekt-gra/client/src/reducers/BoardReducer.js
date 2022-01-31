@@ -10,7 +10,8 @@ const pointsInit = {
     'x4': {value: 0, clicked: false},
     'mały strit': {value: 0, clicked: false},
     'duży strit': {value: 0, clicked: false}, 
-    'generał': {value: 0, clicked: false}
+    'generał': {value: 0, clicked: false},
+    'szansa': {value: 0, clicked: false}
 };
 
 const boardInit = {

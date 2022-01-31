@@ -37,7 +37,7 @@ router.post('/:gameId/moves', async (req, res) => {
     const query = Game.findOne({"gameId": gameId});
 
     query.exec(async function (err, game) {
-        if (err) throw err;
+        if (err) console.log(err);
       
         const newMoves = [...game.moves];
         newMoves.push(move);
@@ -57,7 +57,7 @@ router.delete('/:gameId/moves', async (req, res) => {
     const query = Game.findOne({"gameId": gameId});
 
     query.exec(async function (err, game) {
-        if (err) throw err;
+        if (err) console.log(err);
       
         if (game !== null){
             const newMoves = [...game.moves];

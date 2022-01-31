@@ -11,7 +11,7 @@ const User = require("../models/User");
 router.get('/', async (req, res) => {
     const query = User.find({});
     query.exec(function (err, users) {
-      if (err) throw err;
+      if (err) console.log(err);
       return res.send({
         allUsers: users
       });
@@ -23,7 +23,7 @@ router.get('/:userId', async (req, res) => {
   const userId = req.params.userId;
   const query = User.findOne({"userId": userId})
   query.exec(function (err, user) {
-    if (err) throw err;
+    if (err) console.log(err);
     if (user !== null)
       return res.send(user);
     else {

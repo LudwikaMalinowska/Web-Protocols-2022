@@ -48,7 +48,3 @@ mongoose
 
 
 
-// httpServer.listen(7000, function() {
-//     console.log('Serwer HTTP działa na pocie 7000');
-//    });
-

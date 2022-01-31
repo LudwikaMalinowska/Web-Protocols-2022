@@ -10,14 +10,15 @@ const Cookies = require('js-cookie')
 
 
 const Board = ({gameId, game, username, addMove, getMoveList, getGame, deleteMove, moves, getGameBoard, board, updateGameBoard, updateGame}) => {
-    const [dices, setDices] = useState([1,2,3,4,5]);
+    const [dices, setDices] = useState([0,0,0,0,0]);
     const playerTurn = Cookies.get('playerTurn');
 
     console.log("--mm", moves);
 
     useEffect(async () => {
+        rollDices();
         await getMoveList(gameId);
-        await getGameBoard(gameId)
+        await getGameBoard(gameId);
     }, [])
 
 
@@ -83,6 +84,34 @@ const Board = ({gameId, game, username, addMove, getMoveList, getGame, deleteMov
             return ifBigStrit(nDices);
     }
 
+    const count3X = dices => {
+        const counted = _.countBy(dices);
+        let points = 0;
+        Object.keys(counted).forEach(num => {
+            if (counted[num] >= 3) {
+                points = Number(num) * counted[num];
+            }
+
+        })
+        // console.log(counted);
+
+        return points;
+    }
+
+    const count4X = dices => {
+        const counted = _.countBy(dices);
+        let points = 0;
+        Object.keys(counted).forEach(num => {
+            if (counted[num] >= 4) {
+                points = Number(num) * counted[num];
+            }
+
+        })
+        // console.log(counted);
+
+        return points;
+    }
+
     const countPoints = (field, dices) => {
         switch (field){
             case '1':
@@ -110,6 +139,13 @@ const Board = ({gameId, game, username, addMove, getMoveList, getGame, deleteMov
                     return 50;
                 else
                     return 0;
+            case 'x3':
+                return count3X(dices);
+            case 'x4':
+                return count4X(dices);
+            case 'szansa':
+                const sumDices = _.sum(dices);
+                return sumDices;
             default:
                 return 0;
         }
@@ -134,12 +170,10 @@ const Board = ({gameId, game, username, addMove, getMoveList, getGame, deleteMov
         const nextTurn = (playerTurn === "player1") ? "player2" : "player1";
         addMove(game.gameId, move)
         Cookies.set('playerTurn', nextTurn)
-        // const nGame = {
-        //     ...game,
-        //     playerTurn: nextTurn
-        // }
-        updateGame(gameId, {playerTurn: nextTurn});
         
+        updateGame(gameId, {playerTurn: nextTurn});
+        rollDices();
+
         if (isNoEmptyField(board2)) {
             announceWinner(board2);
         }
@@ -167,7 +201,7 @@ const Board = ({gameId, game, username, addMove, getMoveList, getGame, deleteMov
         alert(winnerText);
     }
 
-    const fields =  ['1', '2', '3', '4', '5', '6', 'x3', 'x4', 'mały strit', 'duży strit', 'generał']
+    const fields =  ['1', '2', '3', '4', '5', '6', 'x3', 'x4', 'mały strit', 'duży strit', 'generał', 'szansa'];
     const tableContent = (board) => fields.map(field => {
         const showPoints = countPoints(field, dices);
 
@@ -221,8 +255,8 @@ const Board = ({gameId, game, username, addMove, getMoveList, getGame, deleteMov
         {board.player1 && tableContent(board)}
         <tr>
             <td>suma =</td>
-            <td>{sumPointsPlayer1(board)}</td>
-            <td>{sumPointsPlayer2(board)}</td>
+            <td>{board.player1 && sumPointsPlayer1(board)}</td>
+            <td>{board.player2 && sumPointsPlayer2(board)}</td>
         </tr>
        </table>
        <div className="rolling">

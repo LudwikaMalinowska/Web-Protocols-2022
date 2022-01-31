@@ -8,7 +8,7 @@ const User = require("../models/User");
 router.get('/', async (req, res) => {
     const query = Game.find({});
     query.exec(function (err, games) {
-      if (err) throw err;
+      if (err) console.log(err);
       return res.send({
         allGames: games
       });
@@ -20,7 +20,7 @@ router.get('/searchName', async (req, res) => {
   const query = Game.find({"gameName" : {$regex : searchedName}});
 
   query.exec(function (err, games) {
-    if (err) throw err;
+    if (err) console.log(err);
     return res.send({
       games: games
     })
@@ -32,7 +32,7 @@ router.get('/searchId', async (req, res) => {
   const query = Game.find({"gameId" : {$regex : searchedId}});
 
   query.exec(function (err, games) {
-    if (err) throw err;
+    if (err) console.log(err);
     return res.send({
       games: games
     })
@@ -44,7 +44,7 @@ router.get('/:gameId', async (req, res) => {
   const gameId = req.params.gameId;
   const query = Game.findOne({"gameId": gameId})
   query.exec(function (err, game) {
-    if (err) throw err;
+    if (err) console.log(err);
     if (game !== null)
       return res.send(game);
     else {
