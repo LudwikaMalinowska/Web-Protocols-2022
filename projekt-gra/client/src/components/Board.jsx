@@ -18,9 +18,7 @@ const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, d
     const [intervals2, setIntervals2] = useState(null);
     const [changingMove, setChangingMove] = useState(false);
 
-    // console.log("--mm", moves);
-    // console.log("game", game);
-    // console.log("-board", board);
+    
 
     useEffect(async () => {
         rollDices();
@@ -123,7 +121,7 @@ const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, d
             }
 
         })
-        // console.log(counted);
+        
 
         return points;
     }
@@ -137,7 +135,7 @@ const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, d
             }
 
         })
-        // console.log(counted);
+        
 
         return points;
     }
@@ -191,7 +189,7 @@ const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, d
             board2[playerTurn][field].clicked = true;
             board2[playerTurn][field].value = showPoints;
 
-            // console.log("board2", board2);
+            
             updateGameBoard(gameId, board2);
 
             const move = {
@@ -290,7 +288,6 @@ const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, d
         }
 
         publish(gameId, JSON.stringify({type: "win", text: winnerText}))
-        // alert(winnerText);
     }
 
     const addAsPlayer = () => {
@@ -348,7 +345,7 @@ const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, d
             
         );
         
-        //if (board) {
+        
         return (
             <tr key={field}>
                 <td>{field}</td>
@@ -356,7 +353,6 @@ const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, d
                 {p2Field}
             </tr>
         )
-        //}
         
         
     })

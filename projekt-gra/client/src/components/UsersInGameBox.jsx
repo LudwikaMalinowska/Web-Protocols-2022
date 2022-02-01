@@ -1,5 +1,4 @@
 import { connect } from "react-redux";
-import { useEffect} from 'react';
 import { getGameUserList } from "../actions/gameUserActions";
 
 
@@ -8,7 +7,6 @@ const UsersInGameBox = ({gameUsers, getGameUserList, topic, username, publish, c
 
     const sendPrivateMessage = (user) => {
         const message = prompt(`Napisz wiadomość do ${user.username}`)
-        // console.log(user);
 
         publish(client.options.clientId, JSON.stringify({username: user.username, topic: client.options.userId, type: "private-message-sent",
         message: message}))
@@ -34,10 +32,7 @@ const UsersInGameBox = ({gameUsers, getGameUserList, topic, username, publish, c
 }
 
 
-const mapStateToProps = (state, props) => {
-    // console.log("state:", state);
-    // const gameId = props.match.params.gameId;
-    // console.log("props:", props);
+const mapStateToProps = (state) => {
     return {
         gameUsers: state.gameUsers
     }

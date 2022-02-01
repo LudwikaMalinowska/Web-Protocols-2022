@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import mqtt from 'mqtt';
 import { connect } from "react-redux";
 import Connect from './Connect';
@@ -39,7 +39,6 @@ const HookMqtt = ({games, getGameList, getUserList, addUser, deleteUser}) => {
               setConnectStatus('Connected');
               console.log("Connected");
 
-              // mqttSubscribe('game-list-board');
               setTopicName("game-list-board");
               client.subscribe("game-list-board");
             }
@@ -60,28 +59,25 @@ const HookMqtt = ({games, getGameList, getUserList, addUser, deleteUser}) => {
             client.end();
           });
           client.on('message', (topic, message) => {
-            // console.log("msg");
+            
             let payload = JSON.parse(message.toString());
             payload.topic = topic;
-            // console.log("msg:", payload);
-            // const payload = { topic, username, message: message.toString() };
-            // console.log("payload", payload);
+            
             setPayload(payload);
           });
-          client.on('close', () => {
-            // if (client) {
+          client.on('disconnect', () => {
               deleteUser(userId);
-              
-            // }
-              
           })
+          client.on('close', () => {
+            deleteUser(userId);
+        })
         }
       }, [client]);
 
     const mqttSubscribe = (topic) => {
       
       if (client) {
-        // console.log("sub");
+        
         client.subscribe(topic, (err) => {
           if (err) {
             console.log(err);
@@ -96,9 +92,8 @@ const HookMqtt = ({games, getGameList, getUserList, addUser, deleteUser}) => {
     }
 
     const mqttPublish = (topic, message) => {
-      // console.log("pub");
+      
       client.publish(topic, message, (err) => {
-        // console.log("---msg", message);
         if (err) {
           console.log("Error: ", err);
         }
@@ -112,7 +107,10 @@ const HookMqtt = ({games, getGameList, getUserList, addUser, deleteUser}) => {
             console.log('Unsubscribe error', error)
             return
           }
-          setIsSub(false);
+          if (topic !== 'game-list-board'){
+            setIsSub(false);
+          }
+          
         });
       }
     };
@@ -133,11 +131,9 @@ const HookMqtt = ({games, getGameList, getUserList, addUser, deleteUser}) => {
         if (connectStatus === "Connected"){
             if (isSubed){
 
-              // const game = games.find(game => game.gameId === topicName);
-              // console.log("---gg", game, topicName);
               return (<GameBoard  topic={topicName} publish={mqttPublish} unsubscribe={mqttUnSub}
               payload={payload} username={username}
-              client={client}
+              client={client} subscribe={mqttSubscribe}
               />)
             } else {
               return (<GameList subscribe={mqttSubscribe}
@@ -148,6 +144,7 @@ const HookMqtt = ({games, getGameList, getUserList, addUser, deleteUser}) => {
                 client={client}
                 disconnect={mqttDisconnect}
                 setUsername={setUsername}
+                unsubscribe={mqttUnSub}
               />)
             }
               
@@ -168,7 +165,6 @@ const HookMqtt = ({games, getGameList, getUserList, addUser, deleteUser}) => {
 }
  
 const mapStateToProps = (state) => {
-  // console.log(state);
   return {
       games: state.games
   }

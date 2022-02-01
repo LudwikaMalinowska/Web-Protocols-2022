@@ -8,9 +8,8 @@ const Chatbox = ({topic, publish, payload, username}) => {
         const key = e.key;
         
         if (key === "Enter") {
-            // console.log("p", payload);
             const message = e.target.value;
-            // console.log(message);
+            
             publish(topic, JSON.stringify({username, message}));
         }
     }

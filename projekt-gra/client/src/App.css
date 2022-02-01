@@ -20,6 +20,11 @@
   font-size: 14px;
 }
 
+.users-in-game-box p:hover {
+  color: yellowgreen;
+  cursor: pointer;
+}
+
 .connect-form {
   display: flex;
   flex-direction: column;

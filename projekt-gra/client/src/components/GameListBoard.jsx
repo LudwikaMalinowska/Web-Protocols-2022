@@ -4,14 +4,13 @@ const GameListBoard = ({payload}) => {
     const [messages, setMessages] = useState([]);
 
     useEffect(() => {
-        // console.log(payload);
         if (payload.topic) {
           setMessages(messages => [...messages, payload])
         }
       }, [payload])
     
     const content = (messages) => {
-        // console.log(messages);
+        
         const m = messages.map(item => {
             const itemKey = Math.random().toString(16).substr(2, 8);
             if (item.type === "create-room"){

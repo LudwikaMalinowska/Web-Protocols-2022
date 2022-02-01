@@ -13,9 +13,6 @@ const EditRoom = ({game, setEditing, updateGame}) => {
     }
 
     const handleSubmit = (values) => {
-        // const {roomName} = values;
-        // console.log("submit");
-        // console.log("game", game);
         updateGame(game.topic, values)
         setEditing(false)
     }
@@ -29,7 +26,6 @@ const EditRoom = ({game, setEditing, updateGame}) => {
     
     <label >Nazwa pokoju: </label>
         <Field name="gameName" ></Field>
-        {/* <ErrorMessage name="username" component="div"/> */}
         
         <button type="submit">Zatwierdź</button>
     
@@ -40,7 +36,6 @@ const EditRoom = ({game, setEditing, updateGame}) => {
 }
  
 const mapStateToProps = (state) => {
-    // console.log(state);
     return {
         games: state.games
     }

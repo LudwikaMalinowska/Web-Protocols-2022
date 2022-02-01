@@ -9,11 +9,11 @@ import EditRoom from "./EditRoom";
 import { getGameUserList, deleteUserFromGame } from "../actions/gameUserActions";
 import UsersInGameBox from "./UsersInGameBox";
 
-const GameBoard = ({game, users, gameUsers, topic, client,publish, unsubscribe, payload, username, deleteGame, getGameUserList, deleteUserFromGame, getGame, updateGame}, props) => {
+const GameBoard = ({game, users, gameUsers, topic, client,publish, unsubscribe, payload, username, deleteGame, getGameUserList, deleteUserFromGame, getGame, updateGame, subscribe}, props) => {
     const [editing, setEditing] = useState(false);
     const [intervals, setIntervals] = useState([])
     const [intervals2, setIntervals2] = useState([])
-    // console.log("---ggg", game)
+    
 
     useEffect(async () => {
         await getGame(topic);
@@ -47,7 +47,8 @@ const GameBoard = ({game, users, gameUsers, topic, client,publish, unsubscribe, 
 
         unsubscribe(topic);
         deleteUserFromGame(topic, client.options.clientId);
-        publish(topic, JSON.stringify({username, roomTopic: topic, type: "leave-room"}))
+        publish(topic, JSON.stringify({username, roomTopic: topic, type: "leave-room"}));
+        subscribe('game-list-board');
     };
 
     const handleDeleteRoom = () => {

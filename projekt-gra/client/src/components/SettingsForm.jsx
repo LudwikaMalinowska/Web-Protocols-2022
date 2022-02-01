@@ -46,7 +46,6 @@ const SettingsForm = ({user, updateUser, setChangingSettings, setUsername}) => {
 }
  
 const mapStateToProps = (state) => {
-    // console.log(state);
     return {
         users: state.users
     }

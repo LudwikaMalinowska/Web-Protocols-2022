@@ -22,9 +22,9 @@ const initialValues = {
 const Connect = ({connect, publish}) => {
 
     const handleSubmit = (values) => {
-        // console.log(values);
+        
         const { host, clientId, port, username, password } = values;
-        // const url = `ws://broker.emqx.io:8083/mqtt`;
+        
         const url = `mqtt://localhost:8000/mqtt`;
 
         const options = {
@@ -48,7 +48,6 @@ const Connect = ({connect, publish}) => {
           options.password = password;
 
           connect(url, options);
-        //   publish('game-list-board', JSON.stringify({username, type: "log-in"}))  
     }
 
     return ( 

@@ -12,13 +12,12 @@ import LoggedInBoard from './LoggedInBoard';
 
 const Cookies = require('js-cookie')
 
-const GameList = ({users, games, client, subscribe, publish, disconnect, payload, username, setUsername, setTopic, addGame, getGameList, getUserList, addUserToGame, getGamesByName, getGamesById}) => {
+const GameList = ({users, games, client, subscribe, publish, disconnect, payload, username, setUsername, setTopic, addGame, getGameList, getUserList, addUserToGame, getGamesByName, getGamesById, unsubscribe}) => {
     const inputRoomId = useRef(null);
     const [changingSettings, setChangingSettings] = useState(false);
     const inputEl = useRef(null);
     const nameButton = useRef(null);
     const idButton = useRef(null);
-    // const [displayedGames, setDisplayedGames] = useState(games);
     const [filterType, setFilterType] = useState('name');
     const [intervals, setIntervals] = useState([]);
 
@@ -34,9 +33,13 @@ const GameList = ({users, games, client, subscribe, publish, disconnect, payload
     const handleSubscribe = (topic) => {
         subscribe(topic);
         subscribe(client.options.clientId);
-        // console.log("Subscribed to " + topic);
+        
         setTopic(topic);
-        //adduser
+        unsubscribe('game-list-board');
+
+
+        publish('game-list-board', JSON.stringify({username, roomTopic: topic, type: "join-room"}))
+        publish(topic, JSON.stringify({username, roomTopic: topic, type: "join-room"}))
 
         const user = {
             userId: client.options.clientId,
@@ -45,7 +48,7 @@ const GameList = ({users, games, client, subscribe, publish, disconnect, payload
             playerNr: '',
         }
         addUserToGame(topic, user);
-        publish(topic, JSON.stringify({username, roomTopic: topic, type: "join-room"}))
+        
 
         intervals.forEach(i => {
             clearInterval(i);
@@ -68,12 +71,11 @@ const GameList = ({users, games, client, subscribe, publish, disconnect, payload
     };
 
     const createRoom = () => {
-        // const roomTopic = "game" + uuidv4()
         const roomTopic = "game_" + Math.random().toString(16).substr(2, 8);
 
-        // console.log("roomTopic: ", roomTopic);
+        
         publish('game-list-board', JSON.stringify({username, roomTopic, type: "create-room"}))
-        // handleSubscribe(roomTopic);
+        
         addGame({gameId: roomTopic, gameName: "Bez Nazwy", gameUsers: [],
         moves: [],
         board: {
@@ -96,7 +98,6 @@ const GameList = ({users, games, client, subscribe, publish, disconnect, payload
         const game = games.find(game => game.gameId === roomId);
         if (game){
             handleSubscribe(roomId);
-            // publish(roomId, JSON.stringify({username, roomTopic: roomId, type: "join-room"}))
             Cookies.set('playerTurn', game.playerTurn)
         }
         
