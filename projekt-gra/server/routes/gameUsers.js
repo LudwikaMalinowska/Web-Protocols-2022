@@ -72,5 +72,32 @@ router.delete('/:gameId/users/:userId', async (req, res) => {
   return res.send(userId);
 });
 
+router.patch('/:gameId/users/:userId', async (req, res) => {
+  const gameId = req.params.gameId;
+  const userId = req.params.userId;
+  const updates = req.body;
+  console.log(updates);
+
+  const game = await Game.findOne({"gameId": gameId});
+  const userIdx = game.users.findIndex(user => user.userId === userId);
+
+  if (userIdx !== -1){
+    const user = game.users[userIdx];
+    const updatedUser = {
+      ...user,
+      ...updates
+    }
+    game.users[userIdx] = updatedUser;
+  }
+  // console.log(newUsers);
+  const updatedGame = await Game.findOneAndUpdate({"gameId": gameId}, {$set: {users: game.users}}
+  // {runValidators: true, overwrite: false, new: true}
+  )
+  .catch(err => console.log(err));
+
+  // console.log("removed user from game: ", userId);
+  return res.send(userId);
+});
+
 
 module.exports = router;

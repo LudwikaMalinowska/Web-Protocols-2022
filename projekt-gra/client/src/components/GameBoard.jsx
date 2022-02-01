@@ -12,6 +12,7 @@ import UsersInGameBox from "./UsersInGameBox";
 const GameBoard = ({game, users, gameUsers, topic, client,publish, unsubscribe, payload, username, deleteGame, getGameUserList, deleteUserFromGame, getGame}, props) => {
     const [editing, setEditing] = useState(false);
     const [intervals, setIntervals] = useState([])
+    const [intervals2, setIntervals2] = useState([])
     // console.log("---ggg", game)
 
     useEffect(async () => {
@@ -19,11 +20,14 @@ const GameBoard = ({game, users, gameUsers, topic, client,publish, unsubscribe, 
         const interval2 = setInterval(() => {
             getGameUserList(topic);
         }, 1000);
-        setIntervals([...intervals, interval2]);
+        setIntervals2([...intervals, interval2]);
     }, [])
 
     const handleUnsub = () => {
         intervals.forEach(i => {
+            clearInterval(i);
+        })
+        intervals2.forEach(i => {
             clearInterval(i);
         })
 
@@ -51,6 +55,7 @@ const GameBoard = ({game, users, gameUsers, topic, client,publish, unsubscribe, 
             <Board username={username} gameId={topic}
                 client={client} 
                 intervals={intervals} setIntervals={setIntervals}
+                publish={publish}
             />
             <Chatbox topic={topic} publish={publish} payload={payload} username={username}/>
             </div>

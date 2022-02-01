@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { getGameBoard, updateGameBoard } from "../actions/boardActions";
 import { getGame, updateGame} from "../actions/gameActions";
+import { updateGameUser } from "../actions/gameUserActions";
 import { addMove, getMoveList, deleteMove } from "../actions/moveActions";
 import "./../board.css";
 
@@ -9,11 +10,12 @@ const _ = require("lodash");
 const Cookies = require('js-cookie')
 
 
-const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, deleteMove, moves, getGameBoard, board, updateGameBoard, updateGame, intervals, setIntervals}) => {
+const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, deleteMove, moves, getGameBoard, board, updateGameBoard, updateGame, intervals, setIntervals, publish, updateGameUser}) => {
     const [dices, setDices] = useState([0,0,0,0,0]);
     let playerTurn = Cookies.get('playerTurn');
     const [isPlayer, setIsPlayer] = useState(false);
     const [player, setPlayer] = useState('');
+    const [intervals2, setIntervals2] = useState(null);
 
     // console.log("--mm", moves);
     // console.log("game", game);
@@ -28,6 +30,18 @@ const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, d
         const interval1 = setInterval(() => {
             getGameBoard(gameId);
         }, 500);
+
+        setTimeout(() => {
+            const interval2 = setInterval(() => {
+                if (board.player1 && (game.gameId === gameId)
+                    && isNoEmptyField(board)){
+                    announceWinner(board);
+                    clearInterval(intervals2);
+
+                }
+            }, 1000);
+            setIntervals2(interval2);
+        }, 2000);
        
 
         setIntervals([...intervals, interval1]);
@@ -215,18 +229,23 @@ const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, d
             winnerText = "Remis!"
         }
 
-        alert(winnerText);
+        publish(gameId, JSON.stringify({type: "win", text: winnerText}))
+        // alert(winnerText);
     }
 
     const addAsPlayer = () => {
         if (game.player1_id === ''){
             setIsPlayer(true);
             setPlayer('player1');
-            updateGame(gameId, {player1_id: client.options.clientId})
+            updateGame(gameId, {player1_id: client.options.clientId});
+
+            updateGameUser(gameId, client.options.clientId, {isPlayer: true, playerNr: 'player1'})
         } else if (game.player2_id === '') {
             setIsPlayer(true);
             setPlayer('player2');
             updateGame(gameId, {player2_id: client.options.clientId})
+
+            updateGameUser(gameId, client.options.clientId, {isPlayer: true, playerNr: 'player2'})
         } else {
             alert("Ta gra ma już 2 graczy!")
         }
@@ -330,7 +349,8 @@ const mapDispatchToProps = {
     deleteMove,
     getGameBoard,
     updateGameBoard,
-    updateGame
+    updateGame,
+    updateGameUser
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Board);

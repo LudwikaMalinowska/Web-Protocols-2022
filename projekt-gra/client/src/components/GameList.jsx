@@ -67,7 +67,8 @@ const GameList = ({users, games, client, subscribe, publish, disconnect, payload
     };
 
     const createRoom = () => {
-        const roomTopic = "game" + uuidv4()
+        // const roomTopic = "game" + uuidv4()
+        const roomTopic = "game_" + Math.random().toString(16).substr(2, 8);
 
         // console.log("roomTopic: ", roomTopic);
         publish('game-list-board', JSON.stringify({username, roomTopic, type: "create-room"}))

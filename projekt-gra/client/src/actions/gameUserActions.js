@@ -45,6 +45,20 @@ export const deleteGameUserFailAction = (error) => ({
     type: "GAME_USERS_DELETE_FAILED",
     payload: error
 })
+//-------
+export const updateGameUserAction = (payload) => ({
+    type: 'GAME_USER_UPDATE',
+    payload
+});
+
+export const updateGameUserStartAction = ({
+    type: "GAME_USER_UPDATE_START"
+});
+
+export const updateGameUserFailAction = (error) => ({
+    type: "GAME_USER_UPDATE_FAILED",
+    payload: error
+})
 
 
 
@@ -98,3 +112,16 @@ export const deleteUserFromGame = (gameId, userId) => {
     }
 }
 
+export const updateGameUser = (gameId, userId, updates) => {
+    return async dispatch => {
+        dispatch(updateGameUserStartAction);
+        setTimeout(async () => {
+            try{
+                const response = await axios.patch(`http://localhost:5000/games/${gameId}/users/${userId}`, updates);
+                dispatch(updateGameUserAction(response.data));        
+            }catch(ex) {
+                dispatch(updateGameUserFailAction(ex));
+            }
+        }, 1000)
+    }
+}

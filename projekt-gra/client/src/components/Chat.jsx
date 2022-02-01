@@ -34,8 +34,10 @@ const Chat = ({payload, username}) => {
               return (<p>{`[${item.username} joined the game]`}</p>)
             if (item.type === "leave-room")
               return (<p>{`[${item.username} left the game]`}</p>)
-
-            
+            }
+            if (item.type === "win") {
+              return (<p style={{color: "red"}}>
+              {item.text}</p>)
             }
         })
         
