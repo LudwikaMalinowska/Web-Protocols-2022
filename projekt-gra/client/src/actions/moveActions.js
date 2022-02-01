@@ -45,6 +45,20 @@ export const deleteMoveFailAction = (error) => ({
     type: "MOVE_DELETE_FAILED",
     payload: error
 })
+//-----
+export const changeMoveAction = (payload) => ({
+    type: 'MOVE_DELETE',
+    payload
+});
+
+export const changeMoveStartAction = ({
+    type: "MOVE_DELETE_START"
+});
+
+export const changeMoveFailAction = (error) => ({
+    type: "MOVE_DELETE_FAILED",
+    payload: error
+})
 
 
 
@@ -54,16 +68,16 @@ export const deleteMoveFailAction = (error) => ({
 export const getMoveList = (gameId) => {
     return async dispatch => {
         dispatch(movesListRequestStartAction);
-        console.log('Create move action');
+        // console.log('Create move action');
         setTimeout(async () => {
             try{
                 const response = await axios.get(`http://localhost:5000/games/${gameId}/moves`);
-                console.log("res", response);
+                // console.log("res", response);
                 dispatch(movesListRequestAction(response.data));        
             }catch(ex) {
                 dispatch(movesListRequestFailAction(ex));
             }
-        }, 1000)
+        }, 0)
     }
 }
 
@@ -78,7 +92,7 @@ export const addMove = (gameId, move) => {
             } catch(ex) {
                 dispatch(addMoveFailAction(ex));
             }
-        }, 1000)
+        }, 0)
     }
 }
 
@@ -95,7 +109,21 @@ export const deleteMove = (gameId) => {
             }catch(ex) {
                 dispatch(deleteMoveFailAction(ex));
             }
-        }, 1000)
+        }, 0)
+    }
+}
+
+export const changeMove = (gameId) => {
+    return async dispatch => {
+        dispatch(deleteMoveStartAction);
+        setTimeout(async () => {
+            try{
+                const response = await axios.put(`http://localhost:5000/games/${gameId}/moves`);
+                dispatch(deleteMoveAction(response.data));        
+            }catch(ex) {
+                dispatch(deleteMoveFailAction(ex));
+            }
+        }, 0)
     }
 }
 

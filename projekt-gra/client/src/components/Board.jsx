@@ -3,14 +3,14 @@ import { connect } from "react-redux";
 import { getGameBoard, updateGameBoard } from "../actions/boardActions";
 import { getGame, updateGame} from "../actions/gameActions";
 import { updateGameUser } from "../actions/gameUserActions";
-import { addMove, getMoveList, deleteMove } from "../actions/moveActions";
+import { addMove, getMoveList, deleteMove, changeMove } from "../actions/moveActions";
 import "./../board.css";
 
 const _ = require("lodash");
 const Cookies = require('js-cookie')
 
 
-const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, deleteMove, moves, getGameBoard, board, updateGameBoard, updateGame, intervals, setIntervals, publish, updateGameUser}) => {
+const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, deleteMove, moves, getGameBoard, board, updateGameBoard, updateGame, intervals, setIntervals, publish, updateGameUser, changeMove}) => {
     const [dices, setDices] = useState([0,0,0,0,0]);
     let playerTurn = Cookies.get('playerTurn');
     const [isPlayer, setIsPlayer] = useState(false);
@@ -29,6 +29,7 @@ const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, d
 
         const interval1 = setInterval(() => {
             getGameBoard(gameId);
+            // getMoveList(gameId);
         }, 500);
 
         setTimeout(() => {
@@ -207,8 +208,32 @@ const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, d
                 announceWinner(board2);
             }
         }
-        
+    }
 
+    const deleteMoveClick = async () => {
+        console.log(moves);
+        console.log(moves.length);
+        if (moves.length > 0){
+            const lastMove = moves[moves.length - 1];
+            console.log(lastMove);
+            if (lastMove.playerNr === player) {
+                const nBoard = JSON.parse(JSON.stringify(board));
+                nBoard[lastMove.playerNr][lastMove.field].value = 0;
+                nBoard[lastMove.playerNr][lastMove.field].clicked = false;
+                console.log(nBoard);
+                await updateGameBoard(gameId, nBoard)
+                await deleteMove(gameId);
+                const nextTurn = (playerTurn === "player1") ? "player2" : "player1";
+                Cookies.set('playerTurn', nextTurn);
+            }
+            else {
+                alert(`Tylko ${lastMove.playerNr} może cofnąć ruchy gracza ${lastMove.playerNr}.`)
+            }
+        }
+        else {
+            alert("Brak ruchów do cofnięcia.")
+        }
+        
     }
 
     const announceWinner = (board) => {
@@ -320,7 +345,7 @@ const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, d
         {isPlayer && <button className="reroll"
         onClick={rollDices}>Roll</button>}
         <p>Suma: {_.sum(dices)}</p>
-        {isPlayer && <button onClick={() => deleteMove(gameId)}>Cofnij ruch</button>}
+        {isPlayer && <button onClick={deleteMoveClick}>Cofnij ruch</button>}
         {!isPlayer && <button
             onClick={addAsPlayer}
         >Dołącz do gry</button>}
@@ -350,7 +375,8 @@ const mapDispatchToProps = {
     getGameBoard,
     updateGameBoard,
     updateGame,
-    updateGameUser
+    updateGameUser,
+    changeMove
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Board);

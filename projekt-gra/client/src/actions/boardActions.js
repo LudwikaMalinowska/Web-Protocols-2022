@@ -48,11 +48,11 @@ export const getGameBoard = (gameId) => {
 
 export const updateGameBoard = (id, board) => {
     
-    console.log("upd");
+    
     return async dispatch => {
         console.log("board22", board);
         dispatch(gameBoardUpdateStartAction);
-        console.log('Update BOARD action');
+        console.log('---Update BOARD action');
         setTimeout(async () => {
             try{
                 const response = await axios.put(`http://localhost:5000/games/${id}/board`, board);

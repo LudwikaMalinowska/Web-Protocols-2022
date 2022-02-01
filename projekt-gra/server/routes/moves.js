@@ -47,7 +47,7 @@ router.post('/:gameId/moves', async (req, res) => {
 
         // console.log(updatedGame.moves);
 
-        return res.send({moves: newMoves});
+        return res.send({move: move});
     })
 
 });
