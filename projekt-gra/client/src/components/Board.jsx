@@ -17,7 +17,10 @@ const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, d
     const [player, setPlayer] = useState('');
     const [intervals2, setIntervals2] = useState(null);
     const [changingMove, setChangingMove] = useState(false);
-
+    const [moveChanged, setMoveChanged] = useState(false);
+    const [moveDeleted, setMoveDeleted] = useState(false);
+    const [rollsLeft, setRollsLeft] = useState(3);
+    const [previousCounter, setPreviousCounter] = useState(3);
     
 
     useEffect(async () => {
@@ -69,7 +72,12 @@ const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, d
         for (let i = 0; i < 5; i++){
             newDices.push(rollDiceNr());
         }
-        setDices(newDices)
+        setDices(newDices);
+    }
+
+    const clickRollDices = () => {
+        rollDices();
+        setRollsLeft(rollsLeft - 1);
     }
 
     let i = 1;
@@ -194,7 +202,7 @@ const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, d
 
             const move = {
                 username: username,
-                playerNr: playerTurn,
+                playerNr: player,
                 field: field,
                 points: showPoints
             }
@@ -205,13 +213,17 @@ const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, d
                 setChangingMove(false);
                 changeMove(gameId, move);
             } else {
-                addMove(gameId, move)
+                addMove(gameId, move);
+                setMoveChanged(false);
             }
             
             Cookies.set('playerTurn', nextTurn)
             
             updateGame(gameId, {playerTurn: nextTurn});
             rollDices();
+            setPreviousCounter(rollsLeft);
+            setRollsLeft(3);
+
 
             if (isNoEmptyField(board2)) {
                 announceWinner(board2);
@@ -223,10 +235,17 @@ const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, d
     const deleteMoveClick = async () => {
         console.log(moves);
         console.log(moves.length);
-        if (moves.length > 0){
+        if (moves.length <= 0){
+            alert("Brak ruchów do cofnięcia.")
+        }
+        else if (moveDeleted) {
+            alert("Ruch można usunąć tylko raz na grę.")
+        }
+        else if (moves.length > 0){
             const lastMove = moves[moves.length - 1];
             console.log(lastMove);
             if (lastMove.playerNr === player) {
+                setRollsLeft(previousCounter);
                 const nBoard = JSON.parse(JSON.stringify(board));
                 nBoard[lastMove.playerNr][lastMove.field].value = 0;
                 nBoard[lastMove.playerNr][lastMove.field].clicked = false;
@@ -235,29 +254,33 @@ const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, d
                 await deleteMove(gameId);
                 const nextTurn = (playerTurn === "player1") ? "player2" : "player1";
                 Cookies.set('playerTurn', nextTurn);
+                setMoveDeleted(true)
             }
             else {
                 alert(`Tylko ${lastMove.playerNr} może cofnąć ruchy gracza ${lastMove.playerNr}.`)
             }
         }
-        else {
-            alert("Brak ruchów do cofnięcia.")
-        }
         
     }
 
     const changeMoveClick = async () => {
-        if (moves.length <= 0){ 
+        
+        if (changingMove) {}
+        else if(moves.length <= 0){ 
             alert("Brak ruchów do zmiany.")
         }
         else {
             const lastMove = moves[moves.length - 1];
             console.log(lastMove);
             if (lastMove.playerNr !== player) {
-                alert(`Tylko ${lastMove.playerNr} może zmienić ruchy gracza ${lastMove.playerNr}.`)
+                alert(`Najpierw wykonaj ruch.`)
+            }
+            else if (moveChanged){
+                alert("Ruch można zmienić tylko raz na turę.")
             }
             else {
                 setChangingMove(true);
+                setRollsLeft(previousCounter);
                 const nBoard = JSON.parse(JSON.stringify(board));
                 nBoard[lastMove.playerNr][lastMove.field].value = 0;
                 nBoard[lastMove.playerNr][lastMove.field].clicked = false;
@@ -265,6 +288,7 @@ const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, d
                 await updateGameBoard(gameId, nBoard);
                 const nextTurn = (playerTurn === "player1") ? "player2" : "player1";
                 Cookies.set('playerTurn', nextTurn);
+                setMoveChanged(true);
             }
         }
     }
@@ -379,14 +403,17 @@ const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, d
         </tbody>
         
        </table>
+
+       
        <div className="rolling">
+       <p>Zostało rzutów: {rollsLeft}</p>
        <div className="dices">
        {content}
        </div>
         
 
-        {isPlayer && <button className="reroll"
-        onClick={rollDices}>Roll</button>}
+        {isPlayer && (rollsLeft > 0) && <button className="reroll"
+        onClick={clickRollDices}>Roll</button>}
         <p>Suma: {_.sum(dices)}</p>
         {isPlayer && <button onClick={deleteMoveClick}>Cofnij ruch</button>}
         {isPlayer && <button onClick={changeMoveClick}>

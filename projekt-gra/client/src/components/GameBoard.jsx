@@ -52,12 +52,17 @@ const GameBoard = ({game, users, gameUsers, topic, client,publish, unsubscribe, 
     };
 
     const handleDeleteRoom = () => {
-        deleteGame(topic);
-        unsubscribe(topic);
-
         intervals.forEach(i => {
             clearInterval(i);
         })
+        intervals2.forEach(i => {
+            clearInterval(i);
+        })
+
+        
+        unsubscribe(topic);
+        publish(topic, JSON.stringify({username, roomTopic: topic, type: "delete-room", unsubscribe: true}) )
+        deleteGame(topic);
     }
 
     
@@ -71,7 +76,11 @@ const GameBoard = ({game, users, gameUsers, topic, client,publish, unsubscribe, 
                 intervals={intervals} setIntervals={setIntervals}
                 publish={publish}
             />
-            <Chatbox topic={topic} publish={publish} payload={payload} username={username}/>
+            <Chatbox topic={topic} publish={publish} payload={payload} username={username}
+            unsubscribe={unsubscribe}
+            intervals={intervals}
+            intervals2={intervals2}
+            />
             </div>
 
             

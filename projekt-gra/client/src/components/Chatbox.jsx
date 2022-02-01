@@ -2,7 +2,7 @@ import Chat from "./Chat";
 import "./../chatbox.css";
 
 
-const Chatbox = ({topic, publish, payload, username}) => {
+const Chatbox = ({topic, publish, payload, username, unsubscribe, intervals, intervals2}) => {
     
     const handleKeyPress = (e) => {
         const key = e.key;
@@ -16,7 +16,11 @@ const Chatbox = ({topic, publish, payload, username}) => {
 
     return ( 
        <div className="chatbox">
-           <Chat payload={payload}/>
+           <Chat payload={payload} 
+           unsubscribe={unsubscribe}
+           intervals={intervals}
+            intervals2={intervals2}
+           />
            <input type="text" className="message-input" placeholder="Write message..."
             onKeyPress={handleKeyPress}
            />
