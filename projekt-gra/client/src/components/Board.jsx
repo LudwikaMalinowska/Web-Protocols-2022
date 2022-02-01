@@ -16,6 +16,7 @@ const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, d
     const [isPlayer, setIsPlayer] = useState(false);
     const [player, setPlayer] = useState('');
     const [intervals2, setIntervals2] = useState(null);
+    const [changingMove, setChangingMove] = useState(false);
 
     // console.log("--mm", moves);
     // console.log("game", game);
@@ -184,6 +185,7 @@ const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, d
         const board2 = 
             JSON.parse(JSON.stringify(board));
         if (playerTurn === player) {
+            
             board2[playerTurn][field].clicked = true;
             board2[playerTurn][field].value = showPoints;
 
@@ -198,7 +200,14 @@ const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, d
             }
             
             const nextTurn = (playerTurn === "player1") ? "player2" : "player1";
-            addMove(game.gameId, move)
+            
+            if (changingMove) {
+                setChangingMove(false);
+                changeMove(gameId, move);
+            } else {
+                addMove(gameId, move)
+            }
+            
             Cookies.set('playerTurn', nextTurn)
             
             updateGame(gameId, {playerTurn: nextTurn});
@@ -207,6 +216,7 @@ const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, d
             if (isNoEmptyField(board2)) {
                 announceWinner(board2);
             }
+            
         }
     }
 
@@ -234,6 +244,29 @@ const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, d
             alert("Brak ruchów do cofnięcia.")
         }
         
+    }
+
+    const changeMoveClick = async () => {
+        if (moves.length <= 0){ 
+            alert("Brak ruchów do zmiany.")
+        }
+        else {
+            const lastMove = moves[moves.length - 1];
+            console.log(lastMove);
+            if (lastMove.playerNr !== player) {
+                alert(`Tylko ${lastMove.playerNr} może zmienić ruchy gracza ${lastMove.playerNr}.`)
+            }
+            else {
+                setChangingMove(true);
+                const nBoard = JSON.parse(JSON.stringify(board));
+                nBoard[lastMove.playerNr][lastMove.field].value = 0;
+                nBoard[lastMove.playerNr][lastMove.field].clicked = false;
+                console.log(nBoard);
+                await updateGameBoard(gameId, nBoard);
+                const nextTurn = (playerTurn === "player1") ? "player2" : "player1";
+                Cookies.set('playerTurn', nextTurn);
+            }
+        }
     }
 
     const announceWinner = (board) => {
@@ -346,6 +379,9 @@ const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, d
         onClick={rollDices}>Roll</button>}
         <p>Suma: {_.sum(dices)}</p>
         {isPlayer && <button onClick={deleteMoveClick}>Cofnij ruch</button>}
+        {isPlayer && <button onClick={changeMoveClick}>
+            Zmień ruch
+        </button>}
         {!isPlayer && <button
             onClick={addAsPlayer}
         >Dołącz do gry</button>}

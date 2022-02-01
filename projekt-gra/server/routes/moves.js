@@ -73,6 +73,28 @@ router.delete('/:gameId/moves', async (req, res) => {
     })
 })
 
+router.put('/:gameId/moves', async (req, res) => {
+    const gameId = req.params.gameId;
+    const query = Game.findOne({"gameId": gameId});
+    const newMove = req.body;
+
+    query.exec(async function (err, game) {
+        if (err) console.log(err);
+      
+        if (game !== null){
+            const newMoves = [...game.moves];
+            newMoves.pop();
+            newMoves.push(newMove);
+    
+            const updatedGame = await Game.findOneAndUpdate({"gameId": gameId}, {$set: {"moves": newMoves}})
+            .catch(err => console.log(err));
+    
+            return res.send({move: newMove});
+        }
+        
+    })
+})
+
 
 
 

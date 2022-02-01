@@ -41,7 +41,8 @@ const GameList = ({users, games, client, subscribe, publish, disconnect, payload
         const user = {
             userId: client.options.clientId,
             username: username,
-            password: client.options.password
+            isPlayer: false,
+            playerNr: '',
         }
         addUserToGame(topic, user);
         publish(topic, JSON.stringify({username, roomTopic: topic, type: "join-room"}))
@@ -72,7 +73,7 @@ const GameList = ({users, games, client, subscribe, publish, disconnect, payload
 
         // console.log("roomTopic: ", roomTopic);
         publish('game-list-board', JSON.stringify({username, roomTopic, type: "create-room"}))
-        handleSubscribe(roomTopic);
+        // handleSubscribe(roomTopic);
         addGame({gameId: roomTopic, gameName: "Bez Nazwy", gameUsers: [],
         moves: [],
         board: {
@@ -84,6 +85,8 @@ const GameList = ({users, games, client, subscribe, publish, disconnect, payload
         player2_id: ''
         });
         Cookies.set('playerTurn', "player1")
+        setFilterType('id')
+        filter(roomTopic);
         
     }
 

@@ -47,16 +47,16 @@ export const deleteMoveFailAction = (error) => ({
 })
 //-----
 export const changeMoveAction = (payload) => ({
-    type: 'MOVE_DELETE',
+    type: 'MOVE_CHANGE',
     payload
 });
 
 export const changeMoveStartAction = ({
-    type: "MOVE_DELETE_START"
+    type: "MOVE_CHANGE_START"
 });
 
 export const changeMoveFailAction = (error) => ({
-    type: "MOVE_DELETE_FAILED",
+    type: "MOVE_CHANGE_FAILED",
     payload: error
 })
 
@@ -113,15 +113,15 @@ export const deleteMove = (gameId) => {
     }
 }
 
-export const changeMove = (gameId) => {
+export const changeMove = (gameId, move) => {
     return async dispatch => {
-        dispatch(deleteMoveStartAction);
+        dispatch(changeMoveStartAction);
         setTimeout(async () => {
             try{
-                const response = await axios.put(`http://localhost:5000/games/${gameId}/moves`);
-                dispatch(deleteMoveAction(response.data));        
+                const response = await axios.put(`http://localhost:5000/games/${gameId}/moves`, move);
+                dispatch(changeMoveAction(response.data));        
             }catch(ex) {
-                dispatch(deleteMoveFailAction(ex));
+                dispatch(changeMoveFailAction(ex));
             }
         }, 0)
     }
