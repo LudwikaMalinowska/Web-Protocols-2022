@@ -31,7 +31,7 @@ const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, d
 
         const interval1 = setInterval(() => {
             getGameBoard(gameId);
-            // getMoveList(gameId);
+            getMoveList(gameId);
         }, 500);
 
         setTimeout(() => {
@@ -188,7 +188,6 @@ const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, d
     }
 
     const clickField = (field, showPoints) => {
-        console.log(player, playerTurn);
         playerTurn = Cookies.get('playerTurn');
         const board2 = 
             JSON.parse(JSON.stringify(board));
@@ -233,8 +232,7 @@ const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, d
     }
 
     const deleteMoveClick = async () => {
-        console.log(moves);
-        console.log(moves.length);
+        
         if (moves.length <= 0){
             alert("Brak ruchów do cofnięcia.")
         }
@@ -243,13 +241,13 @@ const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, d
         }
         else if (moves.length > 0){
             const lastMove = moves[moves.length - 1];
-            console.log(lastMove);
+            
             if (lastMove.playerNr === player) {
                 setRollsLeft(previousCounter);
                 const nBoard = JSON.parse(JSON.stringify(board));
                 nBoard[lastMove.playerNr][lastMove.field].value = 0;
                 nBoard[lastMove.playerNr][lastMove.field].clicked = false;
-                console.log(nBoard);
+                
                 await updateGameBoard(gameId, nBoard)
                 await deleteMove(gameId);
                 const nextTurn = (playerTurn === "player1") ? "player2" : "player1";
@@ -271,7 +269,7 @@ const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, d
         }
         else {
             const lastMove = moves[moves.length - 1];
-            console.log(lastMove);
+            
             if (lastMove.playerNr !== player) {
                 alert(`Najpierw wykonaj ruch.`)
             }
@@ -284,7 +282,7 @@ const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, d
                 const nBoard = JSON.parse(JSON.stringify(board));
                 nBoard[lastMove.playerNr][lastMove.field].value = 0;
                 nBoard[lastMove.playerNr][lastMove.field].clicked = false;
-                console.log(nBoard);
+                
                 await updateGameBoard(gameId, nBoard);
                 const nextTurn = (playerTurn === "player1") ? "player2" : "player1";
                 Cookies.set('playerTurn', nextTurn);

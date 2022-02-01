@@ -28,7 +28,7 @@ const Chat = ({payload, username, unsubscribe, intervals, intervals2}) => {
       }, [payload])
 
     const content = (messages) => {
-        // console.log(messages);
+        
         const m = messages.map(item => {
           const itemKey = Math.random().toString(16).substr(2, 8);
           if (item.message){

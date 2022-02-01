@@ -83,7 +83,7 @@ export const getGameUserList = (gameId) => {
 export const addUserToGame = (gameId, user) => {
     return async dispatch => {
         dispatch(addGameUserStartAction);
-        console.log('Create gameUser action');
+        
         setTimeout(async () => {
             try{
                 const response = await axios.post(`http://localhost:5000/games/${gameId}/users`, user);
@@ -97,10 +97,10 @@ export const addUserToGame = (gameId, user) => {
 
 
 export const deleteUserFromGame = (gameId, userId) => {
-    // console.log("del action id", id);
+    
     return async dispatch => {
         dispatch(deleteGameUserStartAction);
-        console.log('Delete gameUser action');
+        
         setTimeout(async () => {
             try{
                 const response = await axios.delete(`http://localhost:5000/games/${gameId}/users/${userId}`);

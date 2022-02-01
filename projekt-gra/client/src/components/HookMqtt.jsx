@@ -34,7 +34,7 @@ const HookMqtt = ({games, getGameList, getUserList, addUser, deleteUser}) => {
         if (client) {
           client.on('connect', (err) => {
             if (err){
-              console.log(err);
+              //console.log(err);
             } else {
               setConnectStatus('Connected');
               console.log("Connected");

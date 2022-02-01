@@ -68,11 +68,11 @@ export const changeMoveFailAction = (error) => ({
 export const getMoveList = (gameId) => {
     return async dispatch => {
         dispatch(movesListRequestStartAction);
-        // console.log('Create move action');
+        
         setTimeout(async () => {
             try{
                 const response = await axios.get(`http://localhost:5000/games/${gameId}/moves`);
-                // console.log("res", response);
+                
                 dispatch(movesListRequestAction(response.data));        
             }catch(ex) {
                 dispatch(movesListRequestFailAction(ex));
@@ -84,7 +84,7 @@ export const getMoveList = (gameId) => {
 export const addMove = (gameId, move) => {
     return async dispatch => {
         dispatch(addMoveStartAction);
-        console.log('Create move action');
+        
         setTimeout(async () => {
             try{
                 const response = await axios.post(`http://localhost:5000/games/${gameId}/moves`, move);
@@ -98,10 +98,10 @@ export const addMove = (gameId, move) => {
 
 
 export const deleteMove = (gameId) => {
-    // console.log("del action id", id);
+    
     return async dispatch => {
         dispatch(deleteMoveStartAction);
-        console.log('Delete move action');
+        
         setTimeout(async () => {
             try{
                 const response = await axios.delete(`http://localhost:5000/games/${gameId}/moves`);

@@ -33,7 +33,7 @@ const GameBoard = ({game, users, gameUsers, topic, client,publish, unsubscribe, 
         })
 
         
-        console.log("-g", game);
+        
         const isPlayer1 = (game.player1_id === client.options.clientId);
         const isPlayer2 = (game.player2_id === client.options.clientId);
         const updates = {}

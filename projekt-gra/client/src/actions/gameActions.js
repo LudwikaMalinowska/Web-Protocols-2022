@@ -118,7 +118,7 @@ export const getGameList = () => {
         setTimeout(async () => {
             try{
                 const response = await axios.get('http://localhost:5000/games');
-                // console.log("res", response);
+                
                 dispatch(gamesListRequestAction(response.data));        
             }catch(ex) {
                 dispatch(gamesListRequestFailAction(ex));
@@ -128,15 +128,14 @@ export const getGameList = () => {
 }
 
 export const getGamesByName = (name) => {
-    console.log('-action');
-    console.log("n:", name);
+    
     return async dispatch => {
         dispatch(gameGetByNameStartAction);
-        console.log('----action');
+        
         setTimeout(async () => {
             try{
                 const response = await axios.get(`http://localhost:5000/games/searchName?name=${name}`);
-                // console.log("-----res", response);
+                
                 dispatch(gameGetByNameAction(response.data));        
             }catch(ex) {
                 dispatch(gameGetByNameFailAction(ex));
@@ -151,7 +150,7 @@ export const getGamesById = (id) => {
         setTimeout(async () => {
             try{
                 const response = await axios.get(`http://localhost:5000/games/searchId?id=${id}`);
-                console.log("res", response);
+                
                 dispatch(gameGetByIdAction(response.data));        
             }catch(ex) {
                 dispatch(gameGetByIdFailAction(ex));
@@ -166,7 +165,7 @@ export const getGame = (id) => {
         setTimeout(async () => {
             try{
                 const response = await axios.get(`http://localhost:5000/games/${id}`);
-                // console.log("res", response);
+                
                 dispatch(gameGetAction(response.data));        
             }catch(ex) {
                 dispatch(gameGetFailAction(ex));
@@ -178,7 +177,7 @@ export const getGame = (id) => {
 export const addGame = (game) => {
     return async dispatch => {
         dispatch(addGameStartAction);
-        console.log('Create game action');
+        
         setTimeout(async () => {
             try{
                 const response = await axios.post('http://localhost:5000/games', game);
@@ -192,10 +191,10 @@ export const addGame = (game) => {
 
 
 export const deleteGame = (id) => {
-    console.log("del action id", id);
+    
     return async dispatch => {
         dispatch(deleteGameStartAction);
-        console.log('Delete game action');
+        
         setTimeout(async () => {
             try{
                 const response = await axios.delete(`http://localhost:5000/games/${id}`);
@@ -208,15 +207,14 @@ export const deleteGame = (id) => {
 }
 
 export const updateGame = (id, updatedGame) => {
-    console.log("upd");
-    console.log(updatedGame);
+    
     return async dispatch => {
         dispatch(updateGameStartAction);
-        console.log('Update game action');
+        
         setTimeout(async () => {
             try{
                 const response = await axios.put(`http://localhost:5000/games/${id}`, updatedGame);
-                console.log(response);
+                
                 dispatch(updateGameAction(response.data));        
             }catch(ex) {
                 dispatch(updateGameFailAction(ex));

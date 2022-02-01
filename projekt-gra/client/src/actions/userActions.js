@@ -81,7 +81,7 @@ export const getUserList = () => {
 export const addUser = (user) => {
     return async dispatch => {
         dispatch(addUserStartAction);
-        // console.log('Create user action');
+        
         setTimeout(async () => {
             try{
                 const response = await axios.post('http://localhost:5000/users', user);
@@ -95,10 +95,10 @@ export const addUser = (user) => {
 
 
 export const deleteUser = (id) => {
-    console.log("del action id", id);
+    
     return async dispatch => {
         dispatch(deleteUserStartAction);
-        console.log('Delete user action');
+        
         setTimeout(async () => {
             try{
                 const response = await axios.delete(`http://localhost:5000/users/${id}`);
@@ -111,14 +111,14 @@ export const deleteUser = (id) => {
 }
 
 export const updateUser = (id, updatedUser) => {
-    console.log("upd");
+    
     return async dispatch => {
         dispatch(updateUserStartAction);
-        console.log('Update user action');
+        
         setTimeout(async () => {
             try{
                 const response = await axios.put(`http://localhost:5000/users/${id}`, updatedUser);
-                console.log(response);
+                
                 dispatch(updateUserAction(response.data));        
             }catch(ex) {
                 dispatch(updateUserFailAction(ex));
