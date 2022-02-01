@@ -6,7 +6,23 @@ const Chat = ({payload, username, unsubscribe, intervals, intervals2}) => {
     
 
     useEffect(() => {
-        if (payload.topic) {
+      if (payload.unsubscribe){
+        
+        intervals.forEach(i => {
+          clearInterval(i);
+        })
+        intervals2.forEach(i => {
+          clearInterval(i);
+        })
+        unsubscribe(payload.roomTopic);
+        payload.unsubscribe = false;
+        alert(`Pokój został usunięty przez ${payload.username}.`)
+
+        
+        const nMessages = messages.filter(m => !m.unsubscribe)
+        setMessages(nMessages)
+        }
+        else if (payload.topic) {
           setMessages(messages => [...messages, payload])
         }
       }, [payload])
@@ -15,17 +31,7 @@ const Chat = ({payload, username, unsubscribe, intervals, intervals2}) => {
         // console.log(messages);
         const m = messages.map(item => {
           const itemKey = Math.random().toString(16).substr(2, 8);
-          if (item.unsubscribe){
-              intervals.forEach(i => {
-                clearInterval(i);
-              })
-              intervals2.forEach(i => {
-                clearInterval(i);
-              })
-              unsubscribe(item.roomTopic);
-              alert(`Pokój został usunięty przez ${item.username}.`)
-
-          } else if (item.message){
+          if (item.message){
 
             if (item.type === "private-message") {
               return (<p key={itemKey} className='green'>{`From ${item.username}: ${item.message}`}</p>)

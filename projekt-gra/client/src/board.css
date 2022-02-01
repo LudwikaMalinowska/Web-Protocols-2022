@@ -1,7 +1,7 @@
 .App .hook {
     
     box-sizing: border-box;
-    height: 80vh;
+    height: 100vh;
     margin-left: "20px";
 
 }
@@ -15,7 +15,7 @@
 .game-box {
     display: flex;
     flex-direction: row;
-    height: 60vh;
+    height: 70vh;
     width: 100%;
     margin-left: "20px";
     margin-bottom: 10px;

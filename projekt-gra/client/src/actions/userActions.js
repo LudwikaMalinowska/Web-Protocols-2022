@@ -74,7 +74,7 @@ export const getUserList = () => {
             }catch(ex) {
                 dispatch(usersListRequestFailAction(ex));
             }
-        }, 1000)
+        }, 0)
     }
 }
 
@@ -89,7 +89,7 @@ export const addUser = (user) => {
             }catch(ex) {
                 dispatch(addUserFailAction(ex));
             }
-        }, 1000)
+        }, 0)
     }
 }
 
@@ -106,7 +106,7 @@ export const deleteUser = (id) => {
             }catch(ex) {
                 dispatch(deleteUserFailAction(ex));
             }
-        }, 1000)
+        }, 0)
     }
 }
 
@@ -123,6 +123,6 @@ export const updateUser = (id, updatedUser) => {
             }catch(ex) {
                 dispatch(updateUserFailAction(ex));
             }
-        }, 1000)
+        }, 0)
     }
 }

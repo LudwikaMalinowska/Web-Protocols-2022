@@ -42,7 +42,7 @@ export const getGameBoard = (gameId) => {
             }catch(ex) {
                 dispatch(gameBoardGetFailAction(ex));
             }
-        }, 1000)
+        }, 0)
     }
 }
 

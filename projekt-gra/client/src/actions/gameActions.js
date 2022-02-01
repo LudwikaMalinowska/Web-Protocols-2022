@@ -123,7 +123,7 @@ export const getGameList = () => {
             }catch(ex) {
                 dispatch(gamesListRequestFailAction(ex));
             }
-        }, 1000)
+        }, 0)
     }
 }
 
@@ -141,7 +141,7 @@ export const getGamesByName = (name) => {
             }catch(ex) {
                 dispatch(gameGetByNameFailAction(ex));
             }
-        }, 1000)
+        }, 0)
     }
 }
 
@@ -156,7 +156,7 @@ export const getGamesById = (id) => {
             }catch(ex) {
                 dispatch(gameGetByIdFailAction(ex));
             }
-        }, 1000)
+        }, 0)
     }
 }
 
@@ -186,7 +186,7 @@ export const addGame = (game) => {
             }catch(ex) {
                 dispatch(addGameFailAction(ex));
             }
-        }, 1000)
+        }, 0)
     }
 }
 
@@ -221,7 +221,7 @@ export const updateGame = (id, updatedGame) => {
             }catch(ex) {
                 dispatch(updateGameFailAction(ex));
             }
-        }, 1000)
+        }, 0)
     }
 }
 

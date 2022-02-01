@@ -76,7 +76,7 @@ export const getGameUserList = (gameId) => {
                 // console.log("er");
                 dispatch(gameUsersListRequestFailAction(ex));
             }
-        }, 1000)
+        }, 0)
     }
 }
 
@@ -91,7 +91,7 @@ export const addUserToGame = (gameId, user) => {
             }catch(ex) {
                 dispatch(addGameUserFailAction(ex));
             }
-        }, 1000)
+        }, 0)
     }
 }
 
@@ -108,7 +108,7 @@ export const deleteUserFromGame = (gameId, userId) => {
             }catch(ex) {
                 dispatch(deleteGameUserFailAction(ex));
             }
-        }, 1000)
+        }, 0)
     }
 }
 
@@ -122,6 +122,6 @@ export const updateGameUser = (gameId, userId, updates) => {
             }catch(ex) {
                 dispatch(updateGameUserFailAction(ex));
             }
-        }, 1000)
+        }, 0)
     }
 }
