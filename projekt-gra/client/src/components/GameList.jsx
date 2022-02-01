@@ -105,7 +105,7 @@ const GameList = ({users, games, client, subscribe, publish, disconnect, payload
     const showAllGames = (games) => {
         const content = games.map(game => {
             return (
-                <div>
+                <div key={game.gameId}>
                     <p>{game.gameName}</p>
                     <p className='small'>Id: {game.gameId}</p>
                     <button

@@ -3,7 +3,7 @@
 const userReducer = (state = {}, action) => {
     switch(action.type) {
         case"GAME_GET":
-            console.log(action.payload);
+            // console.log(action.payload);
             return action.payload.game;
         case "GAME_GET_START":
             return state;

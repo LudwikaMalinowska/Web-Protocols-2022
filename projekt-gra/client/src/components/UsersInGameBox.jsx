@@ -5,12 +5,6 @@ import { getGameUserList } from "../actions/gameUserActions";
 
 const UsersInGameBox = ({gameUsers, getGameUserList, topic, username, publish, client}) => {
 
-    // useEffect(() => {
-    //     // setInterval(() => {
-    //     //     getGameUserList(topic);
-    //     // }, 300000);
-        
-    // }, [])
 
     const sendPrivateMessage = (user) => {
         const message = prompt(`Napisz wiadomość do ${user.username}`)
@@ -24,8 +18,11 @@ const UsersInGameBox = ({gameUsers, getGameUserList, topic, username, publish, c
     }
 
     const content = gameUsers.map(user => {
+        const randKey = Math.random().toString(16).substr(2, 8);
         const playerText = (user.isPlayer) ? `(${user.playerNr})` : '';
-        return (<p onClick={()=> sendPrivateMessage(user)}>{user.username} {playerText}</p>)
+        return (<p 
+        key={randKey}
+        onClick={()=> sendPrivateMessage(user)}>{user.username} {playerText}</p>)
     })
 
     return ( 

@@ -136,7 +136,7 @@ export const getGamesByName = (name) => {
         setTimeout(async () => {
             try{
                 const response = await axios.get(`http://localhost:5000/games/searchName?name=${name}`);
-                console.log("-----res", response);
+                // console.log("-----res", response);
                 dispatch(gameGetByNameAction(response.data));        
             }catch(ex) {
                 dispatch(gameGetByNameFailAction(ex));
@@ -166,7 +166,7 @@ export const getGame = (id) => {
         setTimeout(async () => {
             try{
                 const response = await axios.get(`http://localhost:5000/games/${id}`);
-                console.log("res", response);
+                // console.log("res", response);
                 dispatch(gameGetAction(response.data));        
             }catch(ex) {
                 dispatch(gameGetFailAction(ex));

@@ -1,8 +1,12 @@
 const LoggedInBoard = ({users}) => {
 
-    const content = users.map(user => (
-        <p>{user.username}</p>
-    ))
+    const content = users.map(user => {
+        const k = Math.random().toString(16).substr(2, 8);
+        return (
+            <p key={k}
+            >{user.username}</p>
+        )
+    } )
     return ( 
         <div className="logged-in-board">
             <h5>Zalogowani użytkownicy</h5>

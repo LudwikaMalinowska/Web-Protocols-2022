@@ -74,9 +74,11 @@ const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, d
         setDices(newDices)
     }
 
-    const content = dices.map(dice => (
-        <div className="dice">{dice}</div>
-    ))
+    let i = 1;
+    const content = dices.map(dice => ( 
+            <div key={i++}
+            className="dice">{dice}</div>
+        ))
 
     const countNumberField = (dices, number) => {
         let occurency = _.countBy(dices)[number];
@@ -200,7 +202,7 @@ const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, d
             }
             
             const nextTurn = (playerTurn === "player1") ? "player2" : "player1";
-            
+
             if (changingMove) {
                 setChangingMove(false);
                 changeMove(gameId, move);
@@ -348,7 +350,7 @@ const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, d
         
         //if (board) {
         return (
-            <tr>
+            <tr key={field}>
                 <td>{field}</td>
                 {p1Field}
                 {p2Field}
@@ -362,12 +364,24 @@ const Board = ({gameId, game, username, client, addMove, getMoveList, getGame, d
     return ( 
        <div className="board">
        <table className="score-table">
+        
+        <thead>
+            <tr>
+                <td> </td>
+                <td>P1</td>
+                <td>P2</td>
+            </tr>
+        </thead>
+        <tbody>
         {board.player1 && tableContent(board)}
         <tr>
+            
             <td>suma =</td>
             <td>{board.player1 && sumPointsPlayer1(board)}</td>
             <td>{board.player2 && sumPointsPlayer2(board)}</td>
         </tr>
+        </tbody>
+        
        </table>
        <div className="rolling">
        <div className="dices">

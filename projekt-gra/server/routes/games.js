@@ -94,7 +94,7 @@ router.delete('/:gameId', async (req, res) => {
 })
 
 router.put("/:gameId", async (req, res) => {
-  console.log("---put")
+  console.log("---put game")
   console.log(req.body);
   const gameId = req.params.gameId;
   // const updatedGame = {
