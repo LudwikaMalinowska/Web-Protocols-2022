@@ -1,2 +1,0 @@
-.\mqtt-cli.exe sub -h localhost -t "cos"
-.\mqtt-cli.exe pub -h localhost -t "cos" -m "hej"
