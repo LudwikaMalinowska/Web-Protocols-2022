@@ -10,7 +10,7 @@ To run the application:
 
 
 ![image](https://user-images.githubusercontent.com/58569359/157289074-af391ab0-9d80-4a25-bce8-12f27f3a9015.png)
-
+- This is a fake login page, the login credentials are not checked in the database, so you can type anything.
 
 
 ![image](https://user-images.githubusercontent.com/58569359/157289152-538b7866-71aa-46f8-bfdd-214df92fcd0d.png)
