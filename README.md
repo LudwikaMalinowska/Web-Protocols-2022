@@ -5,6 +5,7 @@ The application is a game of dice, where you can create or join a room, see all 
 To run the application:
 - npm install in both dice-game/server and dice-game/client directories
 - run the MongoDB database
+- run MQTT on your local computer
 - run the server in dice-game/server directiory with node index.js command
 - run the client in dice-game/client directory with npm start command
 
